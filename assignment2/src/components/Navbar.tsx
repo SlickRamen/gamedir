@@ -2,7 +2,7 @@
 import logo from '../resources/img/logo-with-text.svg';
 import profilePic from '../resources/img/profile-picture.png';
 
-const profileBadgeStyle = {
+const floatRight = {
     marginLeft: "auto",
  }
 
@@ -16,8 +16,11 @@ function Navbar() {
             <li><a className="nav-link" href="#">fresh</a></li>
             <li><a className="nav-link" href="#">explore</a></li>
           </ul>
-          <div className="profile-badge" style={profileBadgeStyle}>
-            <img src={profilePic}></img>
+          <div className="row" style={floatRight}>
+            {/* <input placeholder='Search'></input> */}
+            <div className="profile-badge">
+              <img src={profilePic}></img>
+            </div>
           </div>
         </header>
     </>

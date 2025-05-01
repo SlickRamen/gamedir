@@ -39,7 +39,7 @@ html, body {
 
 header {
     background-color: #fff;
-    padding: 20px;
+    padding: 1rem 1rem 0.5rem 1rem;
     text-align: center;
     width: 100%;
     height: fit-content;
@@ -49,6 +49,10 @@ header {
     gap: 1rem;
 
     align-items: center;
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 
@@ -63,6 +67,7 @@ header {
     height: 100%;
 
     margin-top: 0.5rem;
+    flex-shrink: 0;
 }
 
 .nav-link {
@@ -97,6 +102,36 @@ header {
     width: auto;
 }
 
+.footer {
+    min-height: 150px;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.footer-logo {
+    height: 1.5rem;
+    width: fit-content;
+}
+
+.footer-grid {
+    grid-template-columns: 35% 20% 20% 20%;
+    grid-template-rows: 100%;
+    grid-gap: 10px;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    flex: 1;
+}
+
+
+.footer-grid-item {
+    width: fit-content;
+    height: fit-content;
+}
+
 .page-content {
     display: flex;
     flex-direction: column;
@@ -121,7 +156,7 @@ header {
 
 .row {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5rem;
 }
 
@@ -129,6 +164,11 @@ header {
     font-size: 2rem;
     font-weight: bold;
     margin-top: 1rem;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
 }
 
 .profile-badge {
@@ -146,7 +186,7 @@ header {
 
 .game-container-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem 0.5rem;
     margin: 1rem 0;
 }
@@ -154,7 +194,6 @@ header {
 .game-card {
     position: relative;
     color: var(--text-colour);
-    aspect-ratio: 150 / 250;
     display: flex;
     flex-direction: column;
 }
@@ -169,6 +208,7 @@ header {
 
 .game-card-image {
     width: 100%;
+    aspect-ratio: 1/1.33;
     min-height: 0;
     object-fit: cover;
 }
@@ -194,4 +234,28 @@ header {
     width: 0.5rem;
     height: 1px;
     background-color: var(--text-accent);
+}
+
+input {
+    border-radius: 0;
+    border: 1px solid #000;
+}
+
+button {
+    border-radius: 0;
+    border: 1px solid #000;
+    background-color: transparent;
+    color: var(--text-colour);
+    padding: 0.5rem 1rem;
+}
+
+button:hover {
+    cursor: pointer;
+    border: 1px solid var(--text-accent);
+    color: var(--text-accent);
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.5rem;
 }
