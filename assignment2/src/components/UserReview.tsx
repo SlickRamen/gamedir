@@ -12,7 +12,10 @@ function UserReview({ review }: Props){
     const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
     };
 
     const renderStars = (rating: number) => {
@@ -35,7 +38,7 @@ function UserReview({ review }: Props){
                 <div className="row align-centre">
                     <ProfilePicture creatorId={review.reviewerId} size={"author-icon"}/>
                     <span className="game-author">{review.reviewerFirstName} {review.reviewerLastName}</span>
-                    <span className="float-right">({date})</span>
+                    <span className="float-right">{date}</span>
                 </div>
 
                 <div className="col no-gap">

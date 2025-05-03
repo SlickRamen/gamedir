@@ -4,7 +4,7 @@ interface Props {
 
 function PlatformChip({ platform }: Props){
     return (
-        <a href="#" className="game-platform no-margin" key={platform.platformId}><i className="icon-add"/>{platform.name}</a>
+        <span className="game-platform no-margin" key={platform.platformId}><i className="icon-add"/>{platform.name}</span>
     )
 }
 

@@ -7,8 +7,15 @@ import FilterBar from '../components/FilterBar';
 import Footer from '../components/Footer';
 
 function GameListPage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
+
+  const [filters, setFilters] = useState<FilterOptions>({
+    genreIds: [],
+    platformIds: [],
+    price: 0,
+    sort: "CREATED_ASC"
+  });
 
   const [games, setGames] = useState<Game[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -18,14 +25,31 @@ function GameListPage() {
 
   const fetchGames = async (searchQuery: string="") => {
     setLoading(true); // Start loading
+
     try {
-      const response = await fetch(`http://localhost:4941/api/v1/games?${searchQuery != '' ? `q=${searchQuery}` : ''}`);
+      // Construct query
+      const params = new URLSearchParams();
+      if (searchQuery) params.set("q", searchQuery);
+      if (filters.price) params.set("price", `${filters.price}`);
+      if (filters.genreIds && filters.genreIds.length > 0) {
+        filters.genreIds.forEach(id => params.append("genreIds", id.toString()));
+      }
+      if (filters.platformIds && filters.platformIds.length > 0) {
+        filters.platformIds.forEach(id => params.append("platformIds", id.toString()));
+      }
+
+      if (filters.sort) {
+        params.set("sortBy", filters.sort);
+      }
+
+      const response = await fetch(`http://localhost:4941/api/v1/games?${params.toString()}`);
       const data = await response.json();
 
       // React elements
       setGames(data.games);
       setResultsCount(data.count);
     } catch (error) {
+
       console.error('Error fetching games:', error);
     } finally {
       setLoading(false); // End loading
@@ -92,6 +116,10 @@ function GameListPage() {
     fetchGames(searchTerm);
   };
 
+  const handleFilterChange = (updatedFilters: FilterOptions) => {
+    setFilters(updatedFilters);
+  }
+
   return (
       <div className="wrapper">
         <Navbar />
@@ -104,7 +132,12 @@ function GameListPage() {
             setSearchTerm={setSearchTerm}
             onSearchSubmit={handleSearchSubmit}
           />
-          <FilterBar/>
+          
+          <FilterBar
+            genreIds={genres}
+            platformIds={platforms}
+            onFilterChange={handleFilterChange}
+          />
 
           <hr/>
           <span className="subtitle">{resultsCount} result(s) {submittedSearchTerm != '' ? `for '${submittedSearchTerm}'` : ''}</span>

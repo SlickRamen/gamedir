@@ -10,3 +10,10 @@ interface Game {
   rating: number;
   platformIds: number[];
 }
+
+interface FilterOptions {
+  genreIds: number[]; 
+  platformIds: number[];
+  price: number;
+  sort: string;
+};

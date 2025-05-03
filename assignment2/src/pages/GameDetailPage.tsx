@@ -163,11 +163,16 @@ function GameDetailPage() {
                     <p className="no-margin">{game.description || 'No description provided'}</p>
 
                     <span className="header">User rating</span>
-                    <span>{`${game.rating}/10 from ${reviews.length} review(s)` || 'N/A'}</span>
+                    <span>{reviews.length > 0 ? (`${game.rating}/10 from ${reviews.length} review(s)`) : 'No rating'}</span>
+
+                    <span className="header">Number of wishlists</span>
+                    <span>{game.numberOfWishlists}</span>
+
+                    <span className="header">Number of owners</span>
+                    <span>{game.numberOfOwners}</span>
 
                     <span className="header">Date created</span>
-                    <span>{date}
-                    </span>
+                    <span>{date}</span>
 
                     <span className="header">Created by</span>
                     <div className="row align-centre">
@@ -187,14 +192,15 @@ function GameDetailPage() {
                     <div className="game-platforms align-centre">
                       Available for
                       {gamePlatforms.map((p) => (
-                          <PlatformChip platform={p}/>
+                          <PlatformChip key={p.platformId} platform={p}/>
                       ))}
                     </div>
                   </span>
                 </div>
+
                 <div className="buy-option-container">
                   <span className="buy-price">{ game.price > 0 ? `$${(game.price / 100).toFixed(2)}` : 'free to play'}</span>
-                    <button className="buy-button">Buy now</button>
+                  <button className="buy-button">Mark as owned</button>
                 </div>
               </span>
               

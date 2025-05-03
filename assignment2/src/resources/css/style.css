@@ -276,11 +276,6 @@ header {
     gap: 0.25rem;
 }
 
-.game-platform:hover {
-    color: var(--text-accent);
-    border-color: var(--border-accent);
-}
-
 .game-card-image {
     width: 100%;
     aspect-ratio: 1/1.33;
@@ -400,17 +395,75 @@ hr {
 }
 
 .filter {
+    position: relative;
     padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
     margin-bottom: 0.25rem;
     border: 1px solid var(--border-colour);
     color: var(--text-colour);
     text-decoration: none;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    height: min-content;
 }
 
-.filter:hover {
+.filter:has(.filter-header:hover)  {
     color: var(--text-accent);
     border-color: var(--border-accent);
+}
+
+.filter-header {
+    width: 100%;
+    min-width: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+    justify-content: space-between;
+    transition: width 2s;
+
+    cursor: pointer;
+    color: var(--text-colour);
+    text-decoration: none;
+}
+
+.filter-header:hover {
+    color: var(--text-accent);
+}
+
+.filter-body {
+    width: max-content;
+    min-width: 100px;
+    max-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    z-index: 10;
+    background-color: #fff;
+    border: 1px solid var(--border-colour);
+}
+
+.filter-input {
+    min-width: 0;
+    width: 100px;
+}
+
+.filter-checkbox {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    color: var(--text-colour);
+}
+
+
+.filter-checkbox:hover {
+    color: var(--text-accent);
 }
 
 .buy-cta {

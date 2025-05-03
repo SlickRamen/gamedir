@@ -26,7 +26,7 @@ function GameCard({ game, genre, platforms }: Props){
             <span className="game-card-label">
                 <div className="row align-centre">
                     {genre ? genre.name : "No genre"}
-                    <span className="game-date float-right">Released {date}</span>
+                    <span className="game-date float-right">Created {date}</span>
                 </div>
             </span>
             <img src={imageUrl} className="game-card-image" alt="Game Image" />
@@ -46,7 +46,7 @@ function GameCard({ game, genre, platforms }: Props){
                     <div className="game-platforms align-centre">
                         For
                         {platforms.map((p) => (
-                            <PlatformChip platform={p}/>
+                            <PlatformChip key={p.platformId} platform={p}/>
                         ))}
                     </div>
                 </span>
