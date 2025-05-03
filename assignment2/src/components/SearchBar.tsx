@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface SearchBarProps {
+interface Props {
   searchTerm: string;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
   onSearchSubmit: (e: React.FormEvent) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSearchSubmit }) => {
+function SearchBar({ searchTerm, setSearchTerm, onSearchSubmit } : Props) {
   return (
     <form onSubmit={onSearchSubmit} className="row">
       <input
