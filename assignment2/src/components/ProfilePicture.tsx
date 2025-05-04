@@ -8,7 +8,7 @@ interface Props {
 }
 
 function ProfilePicture({ creatorId, size, refreshKey }: Props) {
-    const [imgSrc, setImgSrc] = useState('');
+    const [imgSrc, setImgSrc] = useState("");
 
     useEffect(() => {
         if (creatorId !== null) {
@@ -22,11 +22,14 @@ function ProfilePicture({ creatorId, size, refreshKey }: Props) {
 
     return (
         <div className={`profile-badge ${size}`}>
-            <img
+            { imgSrc == "" ? (
+            <>
+            </>
+            ) : (<img
                 src={imgSrc}
                 alt="Author"
                 onError={handleImageError}
-            />
+            />)}
         </div>
     );
 }

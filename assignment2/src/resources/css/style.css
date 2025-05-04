@@ -157,6 +157,10 @@ header {
     flex: 1;
 }
 
+.gap-1 {
+    gap: 1rem;
+}
+
 .col.w0 { flex: 0; }
 .col.w1 { flex: 1; }
 .col.w2 { flex: 2; }
@@ -185,6 +189,10 @@ header {
     gap: 0;
 }
 
+.relative {
+    position: relative;
+}
+
 .title {
     font-size: 2rem;
     font-weight: bold;
@@ -203,6 +211,8 @@ header {
     height: 2rem;
     overflow: hidden;
     border-radius: 0.25rem;
+
+    background-color: var(--border-colour);
 }
 
 .profile-badge.author-icon {
@@ -354,6 +364,18 @@ button:disabled,
     color: var(--border-colour);
     border: 1px solid var(--border-colour);
     pointer-events: none;
+}
+
+.password-visibility {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border: none !important;
+}
+
+.expand {
+    width: 100%;
 }
 
 .search-input {
@@ -567,4 +589,23 @@ hr {
     justify-content: center;
 
     margin: 1rem 0;
+}
+
+.form-input {
+    position: relative;
+    width: 100%;
+}
+
+.form-label {
+    position: absolute;
+    background-color: #ffffff;
+    top: -0.5rem;
+    left: 0.5rem;
+    font-size: 0.8rem;
+    padding: 0 0.1rem;
+}
+
+.form-input input {
+    padding: 0.5rem;
+    width: 100%;
 }

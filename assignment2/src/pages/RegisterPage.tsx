@@ -66,30 +66,49 @@ function RegisterPage() {
       <Navbar />
 
       <div className="page-content">
-        <span className="title">Register as a member</span>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <input name="firstName" placeholder="First Name" required onChange={handleChange} />
-          <input name="lastName" placeholder="Last Name" required onChange={handleChange} />
-          <input name="email" placeholder="Email" required onChange={handleChange} />
+        <div className="row">
+          <div className="col w2"/>
+          <form onSubmit={handleSubmit} className="col gap-1 w4">
+            <span className="title">Register as a member</span>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            
+            <div className="row">
+              <label className="form-input"><span className="form-label">First Name*</span><input name="firstName" placeholder="e.g. Jane" required onChange={handleChange} /></label>
+              <label className="form-input"><span className="form-label">Last Name*</span><input name="lastName" placeholder="e.g. Doe" required onChange={handleChange} /></label>
+            </div>
 
-          <div>
-            <input
-              name="password"
-              placeholder="Password"
-              type={showPassword ? 'text' : 'password'}
-              required
-              onChange={handleChange}
-            />
-            <button type="button" onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? 'Hide' : 'Show'}
-            </button>
-          </div>
+            <div className="row">
+              <label className="form-input"><span className="form-label">Email*</span><input name="email" placeholder="e.g. jane@example.com" required onChange={handleChange} /></label>
+            </div>
 
-          <input name="profileImage" type="file" accept="image/png, image/jpeg, image/gif" onChange={handleChange} />
+            <div className="row no-gap relative">
+              <label className="form-input"><span className="form-label">Password*</span>
+                <input
+                  name="password"
+                  placeholder="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  onChange={handleChange}
+                />
+              </label>
+              <button type="button" className="password-visibility" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
 
-          <button type="submit">Register</button>
-        </form>
+            <div className="row">
+              <label className="form-input"><span className="form-label">Profile Icon</span><input name="profileImage" type="file" accept="image/png, image/jpeg, image/gif" onChange={handleChange}/></label>
+            </div>
+
+            <br/>
+
+            <div className="row">
+              <button className="expand" type="button">Cancel</button>
+              <button className="expand" type="submit">Register</button>
+            </div>
+          </form>
+          <div className="col w2"/>
+        </div>
       </div>
 
       <Footer />
