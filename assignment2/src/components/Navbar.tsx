@@ -1,10 +1,26 @@
 
 import logo from '../resources/img/logo-with-text.svg';
-import profilePic from '../resources/img/default-profile.png';
+
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+
+import { useAuthStore } from '../authStore';
+import ProfilePicture from './ProfilePicture';
+
 
 
 function Navbar() {
+  const token = useAuthStore((state) => state.token);
+  const userId = useAuthStore((state) => state.userId);
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
+
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <>
         <header className="header">
@@ -15,10 +31,15 @@ function Navbar() {
             <li><Link className="nav-link" to={`/`}>explore</Link></li>
           </ul>
           <div className="row float-right">
-            {/* <input placeholder='Search'></input> */}
-            <div className="profile-badge">
-              <img src={profilePic}></img>
-            </div>
+            { token ? (
+              <>
+                <button onClick={handleLogout}>Log out</button>
+                <ProfilePicture creatorId={userId} size={""}/>
+              </>
+            ) : (<>
+              <Link className="button" to={`/register`}>Register</Link>
+              <Link className="button" to={`/signin`}>Sign In</Link>
+            </>)}
           </div>
         </header>
     </>

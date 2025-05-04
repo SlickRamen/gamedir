@@ -17,6 +17,10 @@ function GameListPage() {
     sort: "CREATED_ASC"
   });
 
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const resultsPerPage = 10;
+
   const [games, setGames] = useState<Game[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [platforms, setPlatforms] = useState<Platform[]>([]);
@@ -42,12 +46,16 @@ function GameListPage() {
         params.set("sortBy", filters.sort);
       }
 
-      const response = await fetch(`http://localhost:4941/api/v1/games?${params.toString()}`);
+      params.set("count", `${resultsPerPage}`);
+      params.set("startIndex", `${page * resultsPerPage}`);
+
+      const response = await fetch(`/api/v1/games?${params.toString()}`);
       const data = await response.json();
 
       // React elements
       setGames(data.games);
       setResultsCount(data.count);
+      setTotalPages(Math.floor(data.count / resultsPerPage));
     } catch (error) {
 
       console.error('Error fetching games:', error);
@@ -59,7 +67,7 @@ function GameListPage() {
 
   const fetchGenres = async () => {
     try {
-      const response = await fetch(`http://localhost:4941/api/v1/games/genres`);
+      const response = await fetch(`/api/v1/games/genres`);
       const data = await response.json();
 
       // React elements
@@ -74,7 +82,7 @@ function GameListPage() {
 
   const fetchPlatforms = async () => {
     try {
-      const response = await fetch(`http://localhost:4941/api/v1/games/platforms`);
+      const response = await fetch(`/api/v1/games/platforms`);
       const data = await response.json();
 
       // React elements
@@ -113,12 +121,16 @@ function GameListPage() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmittedSearchTerm(searchTerm);
-    fetchGames(searchTerm);
   };
 
   const handleFilterChange = (updatedFilters: FilterOptions) => {
     setFilters(updatedFilters);
   }
+
+  // Re-run whenever the filters, search or page change.
+  useEffect(() => {
+    fetchGames();
+  }, [filters, searchTerm, page]);
 
   return (
       <div className="wrapper">
@@ -140,12 +152,16 @@ function GameListPage() {
           />
 
           <hr/>
-          <span className="subtitle">{resultsCount} result(s) {submittedSearchTerm != '' ? `for '${submittedSearchTerm}'` : ''}</span>
+          <div className="row">
+            <span className="subtitle">{resultsCount} result(s) {submittedSearchTerm != '' ? `for '${submittedSearchTerm}'` : ''}</span>
+            <span className="subtitle float-right">Showing {page * resultsPerPage + 1}-{Math.min((page+1) * resultsPerPage, resultsCount)}</span>
+          </div>
           {loading ? (
             <p>Loading...</p>
           ) : games.length === 0 ? (
             <span className="error-banner">No results found.</span>
           ) : (
+            <>
               <div className="game-container-grid">
                 {games.map((game) => {
                   const genre = genres.find((g) => g.genreId === game.genreId);
@@ -161,7 +177,29 @@ function GameListPage() {
                   );
                 })}
               </div>
+              { page+1 > totalPages ? (
+                <span className="error-banner">
+                No more results.
+              </span>) : (<></>)}
+            </>
           )}
+          <div className="pagination">
+            <button disabled={page === 0} onClick={() => setPage(0)}>
+              First
+            </button>
+            <button disabled={page === 0} onClick={() => setPage(page - 1)}>
+              Prev
+            </button>
+            <span>Page {page + 1}</span>
+            <button
+              disabled={page + 1 > totalPages} onClick={() => setPage(page + 1)}>
+              Next
+            </button>
+            <button
+              disabled={page + 1 > totalPages} onClick={() => setPage(totalPages)}>
+              Last
+            </button>
+          </div>
         </div>
 
         <Footer />

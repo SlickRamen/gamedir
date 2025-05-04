@@ -25,7 +25,7 @@ function GameDetailPage() {
 
   const fetchGame = async () => {
     try {
-      const res = await fetch(`http://localhost:4941/api/v1/games/${id}`);
+      const res = await fetch(`/api/v1/games/${id}`);
       const data = await res.json();
       setGame(data);
     } catch (err) {
@@ -37,7 +37,7 @@ function GameDetailPage() {
 
   const fetchSimilarGames = async () => {
     try {
-      const res = await fetch(`http://localhost:4941/api/v1/games`);
+      const res = await fetch(`/api/v1/games`);
       const allGames = await res.json();
   
       const filtered = allGames.games.filter((g: Game) => 
@@ -53,7 +53,7 @@ function GameDetailPage() {
 
   const fetchGenres = async () => {
     try {
-      const response = await fetch(`http://localhost:4941/api/v1/games/genres`);
+      const response = await fetch(`/api/v1/games/genres`);
       const data = await response.json();
 
       // React elements
@@ -66,7 +66,7 @@ function GameDetailPage() {
 
   const fetchPlatforms = async () => {
     try {
-      const response = await fetch(`http://localhost:4941/api/v1/games/platforms`);
+      const response = await fetch(`/api/v1/games/platforms`);
       const data = await response.json();
 
       // React elements
@@ -80,7 +80,7 @@ function GameDetailPage() {
 
   const fetchReviews = async () => {
     try {
-      const res = await fetch(`http://localhost:4941/api/v1/games/${id}/reviews`);
+      const res = await fetch(`/api/v1/games/${id}/reviews`);
       const data = await res.json();
       setReviews(data);
     } catch (err) {
@@ -149,7 +149,7 @@ function GameDetailPage() {
             <div className="col">
               <div className="row">
                 <div className="col w3">
-                  <img className="game-cover" src={`http://localhost:4941/api/v1/games/${id}/image`} alt={game.title} />  
+                  <img className="game-cover" src={`/api/v1/games/${id}/image`} alt={game.title} />  
                 </div>
                 <div className="col w0"><span className="vr"></span></div>
                 <div className="col w5">

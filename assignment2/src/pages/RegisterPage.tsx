@@ -1,0 +1,100 @@
+import React, { useEffect, useState } from 'react';
+import '../resources/css/style.css';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { useAuthStore } from '../authStore';
+import { useNavigate } from 'react-router-dom';
+
+interface RegisterFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  profileImage: File | null;
+}
+
+function RegisterPage() {
+  const [form, setForm] = useState<RegisterFormData>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    profileImage: null,
+  });
+
+
+  const register = useAuthStore((state) => state.register);
+  const navigate = useNavigate();
+  const token = useAuthStore((state) => state.token);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, files } = e.target;
+
+    // If the input is the file field (profile image), handle it differently
+    if (name === 'profileImage') {
+      setForm((prev) => ({ ...prev, profileImage: files?.[0] || null }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      // Registering user
+      const response = await register(form);
+      // Redirect to home or another page after successful registration
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      setError('Registration failed. Please try again.');
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      navigate('/');
+    }
+  }, [token]);
+
+  return (
+    <div className="wrapper">
+      <Navbar />
+
+      <div className="page-content">
+        <span className="title">Register as a member</span>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <input name="firstName" placeholder="First Name" required onChange={handleChange} />
+          <input name="lastName" placeholder="Last Name" required onChange={handleChange} />
+          <input name="email" placeholder="Email" required onChange={handleChange} />
+
+          <div>
+            <input
+              name="password"
+              placeholder="Password"
+              type={showPassword ? 'text' : 'password'}
+              required
+              onChange={handleChange}
+            />
+            <button type="button" onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
+          </div>
+
+          <input name="profileImage" type="file" accept="image/png, image/jpeg, image/gif" onChange={handleChange} />
+
+          <button type="submit">Register</button>
+        </form>
+      </div>
+
+      <Footer />
+    </div>
+  );
+}
+
+export default RegisterPage;
