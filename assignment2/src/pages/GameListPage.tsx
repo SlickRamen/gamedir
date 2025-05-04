@@ -129,8 +129,8 @@ function GameListPage() {
 
   // Re-run whenever the filters, search or page change.
   useEffect(() => {
-    fetchGames();
-  }, [filters, searchTerm, page]);
+    fetchGames(submittedSearchTerm);
+  }, [filters, submittedSearchTerm, page]);
 
   return (
       <div className="wrapper">

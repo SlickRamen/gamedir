@@ -7,6 +7,7 @@ interface AuthState {
   signin: (data: SigninData) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   logout: () => void;
+  createGame: (data: CreateGameData) => Promise<void>;
   clearAuth: () => void;
 }
 
@@ -22,6 +23,16 @@ interface SigninData {
   email: string;
   password: string;
 }
+
+interface CreateGameData {
+  title: string,
+  description: string,
+  genreId: number,
+  platformIds: number[],
+  image?: File | null,
+  price: number,
+}
+
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -83,9 +94,13 @@ export const useAuthStore = create<AuthState>()(
         set({ token: null, userId: null });
         localStorage.removeItem('auth-storage');
       },      
-
+      
       clearAuth: () => {
         set({ token: null, userId: null });
+      },
+
+      createGame: async () => {
+        throw new Error('createGame not initialized');
       },
     }),
     {
@@ -93,3 +108,43 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
+
+// Assign createGame AFTER the store is created
+useAuthStore.setState({
+  createGame: async ({ title, description, genreId, platformIds, image, price }) => {
+    const { token } = useAuthStore.getState();
+    if (!token) throw new Error('Unauthorized');
+
+    const res = await fetch(`/api/v1/games`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Authorization': token,
+      },
+      body: JSON.stringify({ title, description, genreId, platformIds, price }),
+    });
+
+    if (!res.ok) throw new Error('Game creation failed');
+    const game = await res.json();
+    const gameId = game.gameId;
+
+    if (image) {
+      let contentType = '';
+      if (image.type === 'image/png') contentType = 'image/png';
+      else if (image.type === 'image/jpeg') contentType = 'image/jpeg';
+      else if (image.type === 'image/gif') contentType = 'image/gif';
+      else throw new Error('Unsupported image type');
+
+      const uploadRes = await fetch(`/api/v1/games/${gameId}/image`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': contentType,
+          'X-Authorization': token,
+        },
+        body: image,
+      });
+
+      if (!uploadRes.ok) throw new Error('Image upload failed');
+    }
+  }
+});

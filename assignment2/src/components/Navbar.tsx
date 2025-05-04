@@ -26,8 +26,8 @@ function Navbar() {
         <header className="header">
           <img src={logo} className="nav-logo" alt="logo" />
           <ul className="nav-links">
-            <li><Link className="nav-link" to={`/`}>hot</Link></li>
-            <li><Link className="nav-link" to={`/`}>fresh</Link></li>
+            {/* <li><Link className="nav-link" to={`/`}>hot</Link></li>
+            <li><Link className="nav-link" to={`/`}>fresh</Link></li> */}
             <li><Link className="nav-link" to={`/`}>explore</Link></li>
           </ul>
           <div className="row float-right">

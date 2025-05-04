@@ -9,6 +9,7 @@ import grid from '../resources/img/grid.svg';
 import UserReview from '../components/UserReview';
 import PlatformChip from '../components/PlatformChip';
 import GameCard from '../components/GameCard';
+import GameCover from '../components/GameCover';
 
 function GameDetailPage() {
   const { id } = useParams();
@@ -149,7 +150,7 @@ function GameDetailPage() {
             <div className="col">
               <div className="row">
                 <div className="col w3">
-                  <img className="game-cover" src={`/api/v1/games/${id}/image`} alt={game.title} />  
+                  <GameCover game={game} size={"game-cover"}/>
                 </div>
                 <div className="col w0"><span className="vr"></span></div>
                 <div className="col w5">

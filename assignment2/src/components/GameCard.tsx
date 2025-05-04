@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ProfilePicture from "./ProfilePicture";
 import PlatformChip from "./PlatformChip";
+import GameCover from "./GameCover";
 
 
 interface Props {
@@ -29,7 +30,7 @@ function GameCard({ game, genre, platforms }: Props){
                     <span className="game-date float-right">Created {date}</span>
                 </div>
             </span>
-            <img src={imageUrl} className="game-card-image" alt="Game Image" />
+            <GameCover game={game} size={"game-card-image"}/>
             <div className="game-card-content">
                 <div className="row align-centre">
                     <span className="no-shrink game-card-title-fancy">{game.title}</span>
