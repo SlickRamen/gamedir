@@ -3,7 +3,7 @@ import '../resources/css/style.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useAuthStore } from '../authStore';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 
 interface SigninFormData {
   email: string;
@@ -41,7 +41,12 @@ function SigninPage() {
       setError('Signin failed. Please try again.');
     }
   };
+
+  const returnToHome = () => {
+    navigate('/');
+  }
   
+  // Redirect if already signed in
   useEffect(() => {
     if (token) {
       navigate('/');
@@ -53,26 +58,40 @@ function SigninPage() {
       <Navbar />
 
       <div className="page-content">
-        <span className="title">Sign in to your account</span>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <input name="email" placeholder="Email" required onChange={handleChange} />
+      <div className="row">
+          <div className="col w2"/>
+          <form onSubmit={handleSubmit} className="col gap-1 w4">
+            <span className="title">Sign in to your account</span>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+  
+            <div className="row">
+              <label className="form-input"><span className="form-label">Email*</span><input name="email" placeholder="e.g. jane@example.com" required onChange={handleChange} /></label>
+            </div>
 
-          <div>
-            <input
-              name="password"
-              placeholder="Password"
-              type={showPassword ? 'text' : 'password'}
-              required
-              onChange={handleChange}
-            />
-            <button type="button" onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? 'Hide' : 'Show'}
-            </button>
-          </div>
+            <div className="row no-gap relative">
+              <label className="form-input"><span className="form-label">Password*</span>
+                <input
+                  name="password"
+                  placeholder="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  onChange={handleChange}
+                />
+              </label>
+              <button type="button" className="password-visibility" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
 
-          <button type="submit">Sign In</button>
-        </form>
+            <br/>
+
+            <div className="row">
+              <button className="expand" type="button" onClick={returnToHome}>Cancel</button>
+              <button className="expand" type="submit">Sign In</button>
+            </div>
+          </form>
+          <div className="col w2"/>
+        </div>
       </div>
 
       <Footer />

@@ -55,6 +55,11 @@ function RegisterPage() {
     }
   };
 
+  const returnToHome = () => {
+    navigate('/');
+  }
+
+  // Redirect if already signed in
   useEffect(() => {
     if (token) {
       navigate('/');
@@ -103,7 +108,7 @@ function RegisterPage() {
             <br/>
 
             <div className="row">
-              <button className="expand" type="button">Cancel</button>
+              <button className="expand" type="button" onClick={returnToHome}>Cancel</button>
               <button className="expand" type="submit">Register</button>
             </div>
           </form>
