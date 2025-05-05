@@ -27,7 +27,7 @@ function GameCard({ game, genre, platforms }: Props){
             <span className="game-card-label">
                 <div className="row align-centre">
                     {genre ? genre.name : "No genre"}
-                    <span className="game-date float-right">Created {date}</span>
+                    <span className="game-date float-right">{date}</span>
                 </div>
             </span>
             <GameCover game={game} size={"game-card-image"}/>
@@ -45,7 +45,7 @@ function GameCard({ game, genre, platforms }: Props){
                 <hr/>
                 <span className="platform-list unbound row align-centre">
                     <div className="game-platforms align-centre">
-                        For
+                        For 
                         {platforms.map((p) => (
                             <PlatformChip key={p.platformId} platform={p}/>
                         ))}
@@ -55,6 +55,5 @@ function GameCard({ game, genre, platforms }: Props){
         </Link>
     );
 }
-  
 
 export default GameCard;

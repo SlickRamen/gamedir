@@ -39,7 +39,7 @@ html, body {
 .wrapper {
     display: flex;
     flex-direction: column;
-    max-width: 1000px;
+    max-width: 1200px;
     min-width: 400px;
     width: 100%;
     flex-grow: 1;
@@ -148,7 +148,7 @@ header {
 .page-content {
     display: flex;
     flex-direction: column;
-    padding: 0 1rem;
+    padding: 0 2rem;
     flex-grow: 1;
 }
 
@@ -243,13 +243,13 @@ header {
 
 .game-container-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem 0.5rem;
     margin: 0.5rem 0;
 }
 
 .similar-games {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    display: flex;
 }
 
 .game-card {
@@ -259,6 +259,44 @@ header {
     flex-direction: column;
     border: 1px solid var(--border-colour);
     text-decoration: unset;
+}
+
+.game-card.carousel {
+    position: relative;
+    color: var(--text-colour);
+    display: flex;
+    flex-direction: row;
+    border: 1px solid var(--border-colour);
+    text-decoration: unset;
+    padding: 0.5rem;
+    gap: 0.5rem;
+
+    width: 230px;
+
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.game-card.carousel.active,
+.game-card.carousel:hover {
+    background-color: #efefef;
+    border-color: var(--border-accent);
+    transition: background-color 0.2s;
+}
+
+.progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    background-color: var(--border-accent);
+    opacity: 50%;
+
+    transition: width 0.25s;
+    border-radius: 0;
+    z-index: 0;
 }
 
 .game-card-label {
@@ -294,9 +332,19 @@ header {
 
 .game-card-image {
     width: 100%;
-    aspect-ratio: 1/1.33;
+    aspect-ratio: 1/1;
     min-height: 0;
     object-fit: cover;
+}
+
+.game-card-carousel-image {
+    aspect-ratio: 0.75/1;
+    min-height: 0;
+    height: 75px;
+    width: auto;
+    object-fit: cover;
+    object-position: top;
+    z-index: 1;
 }
 
 .game-cover {
@@ -573,13 +621,14 @@ hr {
     flex-direction: column;
     gap: 0.5rem;
 
-    min-height: 4rem;
+    min-height: 10rem;
 }
 
 .user-review {
     display: flex;
     flex-direction: column;
     border-bottom: 1px solid var(--border-colour);
+    border-radius: 0;
 }
 
 .star-rating {
@@ -671,4 +720,80 @@ textarea {
 
 .dropdown-option:hover {
     color: var(--text-accent);
+}
+
+.game-list-carousel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+
+.current-displayed-game {
+    position: relative;
+    color: var(--text-colour);
+    display: flex;
+    flex-direction: row;
+    border: 1px solid var(--border-colour);
+    text-decoration: unset;
+    align-content: space-between;
+
+    height: 450px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.game-display-image-fill {
+    object-fit: cover;
+    min-height: 100%;
+    flex: 1;
+    min-width: 0;
+    border-radius: 0;
+
+    transition: transform 1s;
+}
+
+.game-display-info {
+    min-width: 350px;
+    padding: 0.5rem 2rem;
+    padding-left: 2rem;
+
+    background: #ffffff;
+
+    z-index: 1;
+    border-radius: 0;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.game-card-carousel-details {
+    display: block;
+    padding: 1rem;
+    width: 100%;
+}
+
+
+@media screen and (max-width: 800px) {
+    .game-container-grid.similar-games {
+        flex-direction: column;
+    }
+
+    .game-list-carousel {
+        flex-direction: row;
+    }
+
+    .game-card.carousel {
+        padding: 0;
+    }
+
+    .game-card-carousel-image {
+        aspect-ratio: 2/1;
+        height: clamp(3rem, 10vw, 4.5rem)
+    }
+
+    .game-card-carousel-details {
+        display: none;
+    }
 }

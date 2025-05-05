@@ -2,21 +2,27 @@ import React, { useEffect, useState, useMemo } from 'react';
 import '../resources/css/style.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import ProfilePicture from '../components/ProfilePicture';
 
 import grid from '../resources/img/grid.svg';
 import UserReview from '../components/UserReview';
 import PlatformChip from '../components/PlatformChip';
-import GameCard from '../components/GameCard';
 import GameCover from '../components/GameCover';
 import { useAuthStore } from '../authStore';
 import RatingStars from '../components/RatingStars';
+import GameCarouselOption from '../components/GameCarouselOption';
+import GameHeroOption from '../components/GameHeroOption';
 
 function GameDetailPage() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [canDeleteGame, setCanDeleteGame] = useState(true);
+
+  const [previewGame, setPreviewGame] = useState<Game | null>(null);
+  const [previewIndex, setPreviewIndex] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const intervalDuration = 5000;
 
   const [game, setGame] = useState<any>(null);
   const [similarGames, setSimilarGames] = useState<Game[]>([]);
@@ -53,6 +59,9 @@ function GameDetailPage() {
       );
   
       setSimilarGames(filtered);
+      setPreviewIndex(0);
+      setPreviewGame(filtered[0] ?? null);
+
     } catch (err) {
       console.error("Error fetching similar games:", err);
     }
@@ -104,7 +113,7 @@ function GameDetailPage() {
     fetchGenres();
     fetchGame();
     fetchPlatforms();
-    fetchReviews()
+    fetchReviews();
   }, [id]);
 
   useEffect(() => {
@@ -133,7 +142,32 @@ function GameDetailPage() {
       fetchSimilarGames();
     }
   }, [game]); 
+  
+  useEffect(() => {
+    if (similarGames.length === 0) return;
+  
+    const interval = setInterval(() => {
+      setElapsedTime((prevElapsed) => {
+        if (prevElapsed >= intervalDuration) {
+          setPreviewIndex((previewIndex + 1) % similarGames.length)
+          return 0;
+        }
+        return prevElapsed + 100;
+      });
+    }, 100);
+  
+    return () => clearInterval(interval);
+  }, [similarGames.length, intervalDuration, previewIndex]);  
+  
 
+  useEffect(() => {
+    if (similarGames.length > 0) {
+      const clampedIndex = previewIndex % similarGames.length;
+      setPreviewGame(similarGames[clampedIndex]);
+    }
+  }, [similarGames, previewIndex]);
+   
+  
   let date: string = "Loading"
   
   if (game) {
@@ -150,6 +184,11 @@ function GameDetailPage() {
   const viewEditPage = () => navigate(`/game/${id}/edit`);
   const viewDeletePage = () => navigate(`/game/${id}/delete`);
 
+  const handlePreviewClick = (ind: number) => {
+    setPreviewIndex(ind);
+    setElapsedTime(0);
+  }
+
   return (
       <div className="wrapper">
         <Navbar />
@@ -162,11 +201,11 @@ function GameDetailPage() {
           : (
             <div className="col">
               <div className="row">
-                <div className="col w3">
+                <div className="col w4">
                   <GameCover game={game} size={"game-cover"}/>
                 </div>
                 <div className="col w0"><span className="vr"></span></div>
-                <div className="col w5">
+                <div className="col w4">
                   <div className="row align-centre">
                     <span className="title">{game.title}</span>
                     { game.creatorId === userId ? (
@@ -237,38 +276,55 @@ function GameDetailPage() {
               </span>
               
               <span className="title row align-centre">Similar games</span>
-                {similarGames.length === 0 ? (
+                { (similarGames.length === 0 || !previewGame) ? (
                   <span className="error-container">
                     <span className="error-banner">No similar games found</span>
                   </span>
                 ) : (
                   <div className="game-container-grid similar-games">
-                    {similarGames.map((game) => {
-                      const genre = genres.find((g) => g.genreId === game.genreId);
-                      const gamePlatforms = platforms.filter((p) => game.platformIds.includes(p.platformId));
+                    {
+                      <Link to={`/game/${previewGame.gameId}`} className="current-displayed-game">
+                        <GameHeroOption 
+                        game={previewGame} 
+                        genre={genres.find((g) => g.genreId === game.genreId)}
+                        platforms={platforms.filter((p) => game.platformIds.includes(p.platformId))}/>
+                      </Link>
+                    }
+                    <div className="game-list-carousel">
+                      {similarGames.map((game, ind) => {
+                        const genre = genres.find((g) => g.genreId === game.genreId);
+                        const gamePlatforms = platforms.filter((p) => game.platformIds.includes(p.platformId));
+                        const progressPercent = (elapsedTime / intervalDuration) * 100;
 
-                      return (
-                        <GameCard
-                          key={game.gameId}
-                          game={game}
-                          genre={genre}
-                          platforms={gamePlatforms}
-                        />
-                      );
-                    })}
+                        return (
+                          <div className="select-carousel-wrapper" key={game.gameId} onClick={() => handlePreviewClick(ind)}>
+                            <GameCarouselOption
+                              game={game}
+                              active={ind === previewIndex}
+                              progress={progressPercent}
+                              // genre={genre}
+                              // platforms={gamePlatforms}
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>      
                 )}
               <span className="title row align-centre">User reviews</span>
               <span className="subtitle">{reviews.length} review(s)</span>
-              <div className="user-reviews">
-                { reviews.length === 0 ? (
-                  <span className="error-banner">No reviews... yet</span> )
-                  : ( <>
-                    {reviews.map((r) => (
-                        <UserReview review = {r}/>
-                    ))}
-                  </>)
-                }
+              <div className="row">
+                <div className="col w4 user-reviews">
+                  { reviews.length === 0 ? (
+                    <span className="error-banner">No reviews... yet</span> )
+                    : ( <>
+                      {reviews.map((r) => (
+                          <UserReview review = {r}/>
+                      ))}
+                    </>)
+                  }
+                </div>
+                <div className="col w4"/>
               </div>
             </div>
           ))}

@@ -7,10 +7,12 @@ import SigninPage from './pages/SigninPage';
 import GameFormCreatePage from './pages/GameFormCreatePage';
 import GameFormEditPage from './pages/GameFormEditPage';
 import GameDeletePage from './pages/GameDeletePage';
+import ScrollToTop from './ScrollToTop';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />  {/* Scroll to the top on route change */}
       <Routes>
         <Route path="/"               element={<GameListPage />} />
         <Route path="/register"       element={<RegisterPage />} />
