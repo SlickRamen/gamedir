@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ProfilePicture from "./ProfilePicture";
+import RatingStars from "./RatingStars";
 
 
 interface Props {
@@ -18,19 +19,6 @@ function UserReview({ review }: Props){
         hour12: true
     };
 
-    const renderStars = (rating: number) => {
-        const stars = [];
-        const fullStars = Math.floor(rating / 2);
-        const hasHalfStar = rating % 2 >= 1;
-        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-      
-        for (let i = 0; i < fullStars; i++) stars.push(<i className="icon-add" key={`full-${i}`} />);
-        if (hasHalfStar) stars.push(<i className="icon-calendar" key="half" />);
-        for (let i = 0; i < emptyStars; i++) stars.push(<i className="icon-trashcan" key={`empty-${i}`} />);
-      
-        return stars;
-    };
-
     const date: string = fetchedDate.toLocaleDateString(undefined, options);
     return (
         <div className="user-review">
@@ -43,9 +31,7 @@ function UserReview({ review }: Props){
 
                 <div className="col no-gap">
                     <div className="row align-centre">
-                        <div className="star-rating">
-                            {renderStars(review.rating)}
-                        </div>
+                        <RatingStars rating={review.rating}/>
                         <span>{review.rating} / 10</span>
                     </div>
                     <span className="">{review.review != "" ? review.review : 'No review content.'}</span>

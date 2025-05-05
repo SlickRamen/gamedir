@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import '../resources/css/style.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ProfilePicture from '../components/ProfilePicture';
 
 import grid from '../resources/img/grid.svg';
@@ -10,10 +10,13 @@ import UserReview from '../components/UserReview';
 import PlatformChip from '../components/PlatformChip';
 import GameCard from '../components/GameCard';
 import GameCover from '../components/GameCover';
+import { useAuthStore } from '../authStore';
+import RatingStars from '../components/RatingStars';
 
 function GameDetailPage() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
+  const [canDeleteGame, setCanDeleteGame] = useState(true);
 
   const [game, setGame] = useState<any>(null);
   const [similarGames, setSimilarGames] = useState<Game[]>([]);
@@ -23,6 +26,9 @@ function GameDetailPage() {
   const [gameGenre, setGameGenre] = useState<Genre>({ genreId: 0, name: '' });
   const [gamePlatforms, setGamePlatforms] = useState<Platform[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+
+  const navigate = useNavigate();
+  const userId = useAuthStore((state) => state.userId);
 
   const fetchGame = async () => {
     try {
@@ -83,6 +89,10 @@ function GameDetailPage() {
     try {
       const res = await fetch(`/api/v1/games/${id}/reviews`);
       const data = await res.json();
+
+      if (data && data.length > 0) {
+        setCanDeleteGame(false);
+      }
       setReviews(data);
     } catch (err) {
       console.error('Error fetching reviews:', err);
@@ -137,6 +147,9 @@ function GameDetailPage() {
     date = fetchedDate.toLocaleDateString(undefined, options);
   }
 
+  const viewEditPage = () => navigate(`/game/${id}/edit`);
+  const viewDeletePage = () => navigate(`/game/${id}/delete`);
+
   return (
       <div className="wrapper">
         <Navbar />
@@ -154,7 +167,18 @@ function GameDetailPage() {
                 </div>
                 <div className="col w0"><span className="vr"></span></div>
                 <div className="col w5">
-                  <span className="title">{game.title}</span>
+                  <div className="row align-centre">
+                    <span className="title">{game.title}</span>
+                    { game.creatorId === userId ? (
+                      <div className="row align-centre float-right">
+                        <button onClick={viewEditPage}>Edit</button>
+                        <button onClick={viewDeletePage} disabled={!canDeleteGame}>Delete</button>
+                      </div>
+                    ) : (
+                    <></>
+                    )}
+                    
+                  </div>
                   <img src={grid}></img>
                   <span className="subtitle">{gameGenre.name}</span>
                   <hr/>
@@ -164,8 +188,11 @@ function GameDetailPage() {
                     <p className="no-margin">{game.description || 'No description provided'}</p>
 
                     <span className="header">User rating</span>
-                    <span>{reviews.length > 0 ? (`${game.rating}/10 from ${reviews.length} review(s)`) : 'No rating'}</span>
-
+                    <div className="row align-centre">
+                      <RatingStars rating={game.rating}/>
+                      <span>{reviews.length > 0 ? (`${game.rating}/10 from ${reviews.length} review(s)`) : 'No rating'}</span>
+                    </div>
+                    
                     <span className="header">Number of wishlists</span>
                     <span>{game.numberOfWishlists}</span>
 
@@ -178,7 +205,11 @@ function GameDetailPage() {
                     <span className="header">Created by</span>
                     <div className="row align-centre">
                         <ProfilePicture creatorId={game.creatorId} size={"details-page-icon"}/>
-                        <span className="details-page-author">{game.creatorFirstName} {game.creatorLastName}</span>
+                        <span className="details-page-author">{ game.creatorId == userId ? (
+                          `${game.creatorFirstName} ${game.creatorLastName} (you)`
+                        ) : (
+                          `${game.creatorFirstName} ${game.creatorLastName}`
+                        )}</span>
                     </div>
                   </div>
                 </div>

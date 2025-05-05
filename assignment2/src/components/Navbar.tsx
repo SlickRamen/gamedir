@@ -6,20 +6,11 @@ import { Link } from 'react-router-dom';
 
 import { useAuthStore } from '../authStore';
 import ProfilePicture from './ProfilePicture';
-
-
+import ProfileDropdown from './ProfileDropdown';
 
 function Navbar() {
   const token = useAuthStore((state) => state.token);
   const userId = useAuthStore((state) => state.userId);
-  const logout = useAuthStore((state) => state.logout);
-  const navigate = useNavigate();
-
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
 
   return (
     <>
@@ -33,8 +24,7 @@ function Navbar() {
           <div className="row float-right">
             { token ? (
               <>
-                <button onClick={handleLogout}>Log out</button>
-                <ProfilePicture creatorId={userId} size={""}/>
+                <ProfileDropdown userId={userId}/>
               </>
             ) : (<>
               <Link className="button" to={`/register`}>Register</Link>

@@ -47,6 +47,8 @@ html, body {
 
     border-left: 1px solid var(--border-colour);
     border-right: 1px solid var(--border-colour);
+
+    border-radius: 0;
 }
 
 header {
@@ -341,6 +343,10 @@ header {
     background-color: var(--text-accent);
 }
 
+.game-name-keyword {
+    color: var(--text-accent);
+}
+
 input {
     border: 1px solid #000;
 }
@@ -633,4 +639,36 @@ textarea {
     width: 100%;
     min-width: 100%;
     resize: none;
+}
+
+.profile-dropdown-wrapper {
+    position: relative;
+}
+
+.profile-dropdown {
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #000;
+    color: var(--text-colour);
+
+    right: -0.5rem;
+
+    width: 150px;
+
+    top: 2.25rem;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 0.5rem;
+    gap: 0.25rem;
+}
+
+.dropdown-option {
+    color: var(--text-colour);
+    text-decoration: none;
+}
+
+.dropdown-option:hover {
+    color: var(--text-accent);
 }

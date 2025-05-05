@@ -157,7 +157,7 @@ function GameListPage() {
             <span className="subtitle float-right">Showing {page * resultsPerPage + 1}-{Math.min((page+1) * resultsPerPage, resultsCount)}</span>
           </div>
           {loading ? (
-            <p>Loading...</p>
+            <span className="error-banner">Loading... please wait</span>  
           ) : games.length === 0 ? (
             <span className="error-banner">No results found.</span>
           ) : (
