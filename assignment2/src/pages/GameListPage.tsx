@@ -5,6 +5,8 @@ import GameCard from '../components/GameCard';
 import SearchBar from '../components/SearchBar';
 import FilterBar from '../components/FilterBar';
 import Footer from '../components/Footer';
+import { useAuthStore } from '../authStore';
+import { useNavigate } from 'react-router-dom';
 
 function GameListPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -99,24 +101,6 @@ function GameListPage() {
     fetchGames();
     fetchPlatforms();
   }, []);
-
-
-  const genreMap = useMemo(() => {
-    const map: Record<number, string> = {};
-    genres.forEach((g) => {
-      map[g.genreId] = (g.genreId, g.name);
-    });
-    return map;
-  }, [genres]);
-
-  const platformMap = useMemo(() => {
-    const map: Record<number, string> = {};
-    platforms.forEach((p) => {
-      map[p.platformId] = p.name;
-    });
-    return map;
-  }, [platforms]);
-
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();

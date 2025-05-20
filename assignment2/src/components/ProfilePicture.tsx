@@ -8,7 +8,7 @@ interface Props {
 }
 
 function ProfilePicture({ creatorId, size, refreshKey }: Props) {
-    const [imgSrc, setImgSrc] = useState("");
+    const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (creatorId !== null) {
@@ -34,4 +34,4 @@ function ProfilePicture({ creatorId, size, refreshKey }: Props) {
     );
 }
 
-export default ProfilePicture;
+export default React.memo(ProfilePicture);

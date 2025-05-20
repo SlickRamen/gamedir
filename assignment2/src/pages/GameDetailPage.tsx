@@ -1,18 +1,20 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import '../resources/css/style.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, redirect, useNavigate, useParams } from 'react-router-dom';
 import ProfilePicture from '../components/ProfilePicture';
 
 import grid from '../resources/img/grid.svg';
 import UserReview from '../components/UserReview';
+import ReviewInputForm from '../components/ReviewInputForm';
 import PlatformChip from '../components/PlatformChip';
 import GameCover from '../components/GameCover';
 import { useAuthStore } from '../authStore';
 import RatingStars from '../components/RatingStars';
 import GameCarouselOption from '../components/GameCarouselOption';
 import GameHeroOption from '../components/GameHeroOption';
+import ReviewPlaceholderForm from '../components/ReviewPlaceholderForm';
 
 function GameDetailPage() {
   const { id } = useParams();
@@ -22,9 +24,12 @@ function GameDetailPage() {
   const [previewGame, setPreviewGame] = useState<Game | null>(null);
   const [previewIndex, setPreviewIndex] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const intervalDuration = 5000;
+  const intervalDuration = 10000;
 
   const [game, setGame] = useState<any>(null);
+  const [isOwned, setIsOwned] = useState<boolean>(false)
+  const [isWishlisted, setIsWishlisted] = useState<boolean>(false)
+
   const [similarGames, setSimilarGames] = useState<Game[]>([]);
 
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -35,6 +40,33 @@ function GameDetailPage() {
 
   const navigate = useNavigate();
   const userId = useAuthStore((state) => state.userId);
+  const token = useAuthStore((state) => state.token);
+
+  const updateIsOwned = async () => {
+    if (token) {
+      const allGames = await fetch('/api/v1/games?ownedByMe=true', {
+            headers: { 'X-Authorization': token },
+          });
+
+      const gamesData = await allGames.json();
+      const owned = gamesData.games.some((foundGame: { gameId: any; }) => foundGame.gameId === game.gameId);
+
+      setIsOwned(owned);
+    }
+  }
+
+  const updateIsWishlisted = async () => {
+    if (token) {
+      const allGames = await fetch('/api/v1/games?wishlistedByMe=true', {
+            headers: { 'X-Authorization': token },
+          });
+
+      const gamesData = await allGames.json();
+      const wishlisted = gamesData.games.some((foundGame: { gameId: any; }) => foundGame.gameId === game.gameId);
+
+      setIsWishlisted(wishlisted);
+    }
+  }
 
   const fetchGame = async () => {
     try {
@@ -61,7 +93,6 @@ function GameDetailPage() {
       setSimilarGames(filtered);
       setPreviewIndex(0);
       setPreviewGame(filtered[0] ?? null);
-
     } catch (err) {
       console.error("Error fetching similar games:", err);
     }
@@ -74,7 +105,6 @@ function GameDetailPage() {
 
       // React elements
       setGenres(data);
-      console.log(data);
     } catch (err) {
       console.error('Error fetching genres:', err);
     }
@@ -87,7 +117,6 @@ function GameDetailPage() {
 
       // React elements
       setPlatforms(data);
-      console.log(data);
     } catch (err) {
       console.error('Error fetching platforms:', err);
     }
@@ -114,7 +143,25 @@ function GameDetailPage() {
     fetchGame();
     fetchPlatforms();
     fetchReviews();
+
+    return () => {}
   }, [id]);
+
+
+  const previousGameIdRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!game) return;
+
+    // Only run when gameId has truly changed
+    if (previousGameIdRef.current !== game.gameId) {
+        previousGameIdRef.current = game.gameId;
+        updateIsOwned();
+        updateIsWishlisted();
+
+        fetchSimilarGames();
+    }
+  }, [game])
 
   useEffect(() => {
     if (genres.length > 0 && game) {
@@ -138,12 +185,6 @@ function GameDetailPage() {
   }, [platforms, game]);
 
   useEffect(() => {
-    if (game) {
-      fetchSimilarGames();
-    }
-  }, [game]); 
-  
-  useEffect(() => {
     if (similarGames.length === 0) return;
   
     const interval = setInterval(() => {
@@ -157,7 +198,7 @@ function GameDetailPage() {
     }, 100);
   
     return () => clearInterval(interval);
-  }, [similarGames.length, intervalDuration, previewIndex]);  
+  }, [similarGames, intervalDuration, previewIndex]);  
   
 
   useEffect(() => {
@@ -187,6 +228,59 @@ function GameDetailPage() {
   const handlePreviewClick = (ind: number) => {
     setPreviewIndex(ind);
     setElapsedTime(0);
+  }
+
+  const toggleOwnedStatus = async (game: Game) => {
+    try {
+      if (token) {
+        if (game.creatorId != userId) {
+          const method = (isOwned ? 'DELETE' : 'POST');
+
+          const response = await fetch(`/api/v1/games/${game.gameId}/owned`, {
+            method,
+            headers: {
+              'X-Authorization': token,
+            },
+          });
+
+          updateIsOwned();
+          updateIsWishlisted();
+        }
+      } else {
+        navigate("/signin")
+      }
+    } catch (error) {
+      console.log("Error when trying to toggle owned game: " + error);
+    }
+  };
+
+  const toggleWishlistStatus = async (game: Game) => {
+    try {
+      if (token) {
+        if (game.creatorId != userId && isOwned === false) {
+          const method = (isWishlisted ? 'DELETE' : 'POST');
+
+          const response = await fetch(`/api/v1/games/${game.gameId}/wishlist`, {
+            method,
+            headers: {
+              'X-Authorization': token,
+            },
+          });
+
+          updateIsWishlisted();
+        }
+      } else {
+        navigate("/signin")
+      }
+    } catch (error) {
+      console.log("Error when trying to toggle wishlisted game: " + error);
+    }
+  };
+
+  // Reload
+  function reloadGameDetails() {  
+    fetchReviews();
+    fetchGame();
   }
 
   return (
@@ -271,7 +365,18 @@ function GameDetailPage() {
 
                 <div className="buy-option-container">
                   <span className="buy-price">{ game.price > 0 ? `$${(game.price / 100).toFixed(2)}` : 'free to play'}</span>
-                  <button className="buy-button">Mark as owned</button>
+                  { game.creatorId == userId ? (
+                      <button className="buy-button" disabled>Can't mark your own game as owned!</button>
+                    ) : (
+                      <>
+                        <button className="buy-button" onClick={() => toggleOwnedStatus(game)}>{ isOwned ? 'Unmark as owned' : 'Mark as owned'}</button>
+                        {isOwned ? (
+                          <></>//button className="buy-button" disabled>Can't wishlist game you already own!</button>
+                        ) : (
+                          <button className="buy-button" onClick={() => toggleWishlistStatus(game)}>{ isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}</button>
+                        )}
+                      </>
+                    ) }
                 </div>
               </span>
               
@@ -313,18 +418,25 @@ function GameDetailPage() {
                 )}
               <span className="title row align-centre">User reviews</span>
               <span className="subtitle">{reviews.length} review(s)</span>
-              <div className="row">
-                <div className="col w4 user-reviews">
+              <div className="row wide-row collapse">
+                <div className="col w5 user-reviews">
                   { reviews.length === 0 ? (
                     <span className="error-banner">No reviews... yet</span> )
                     : ( <>
                       {reviews.map((r) => (
-                          <UserReview review = {r}/>
+                          <UserReview key={r.reviewerId} review = {r}/>
                       ))}
                     </>)
                   }
                 </div>
-                <div className="col w4"/>
+                <div className="col w3 user-reviews">
+                  { userId && userId != game.creatorId ? (
+                      <ReviewInputForm game={game} onReviewSubmitted={reloadGameDetails}/> 
+                    ) : ( 
+                      <ReviewPlaceholderForm userId={userId}/>
+                    )
+                  }
+                </div>
               </div>
             </div>
           ))}

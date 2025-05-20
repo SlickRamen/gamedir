@@ -179,8 +179,16 @@ header {
     gap: 0.5rem;
 }
 
+.wide-row {
+    gap: 1.5rem;
+}
+
 .align-centre {
     align-items: center;
+}
+
+.justify-centre {
+    justify-content: center;
 }
 
 .float-right {
@@ -189,6 +197,14 @@ header {
 
 .no-gap {
     gap: 0;
+}
+
+.no-shrink {
+    flex-shrink: 0;
+}
+
+.fit-min {
+    width: max-content;
 }
 
 .wrap {
@@ -235,6 +251,14 @@ header {
     height: 2rem;
 }
 
+.profile-badge.massive{
+    max-width: 10rem;
+    max-height: 10rem;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 1rem;
+}
+
 .profile-badge img {
     width: 100%;
     height: 100%;
@@ -245,11 +269,13 @@ header {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem 0.5rem;
+
     margin: 0.5rem 0;
 }
 
 .similar-games {
     display: flex;
+    height: 500px;
 }
 
 .game-card {
@@ -287,17 +313,26 @@ header {
 
 .progress-bar {
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
 
-    height: 100%;
-    background-color: var(--border-accent);
-    opacity: 50%;
+    height: 0.25rem;
+    background-color: var(--text-accent);
 
     transition: width 0.25s;
-    border-radius: 0;
+    border-radius: 0 0.25rem 0.25rem 0 ;
     z-index: 0;
 }
+/* 
+.progress-bar::after {
+    content: "";
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: red;
+} */
 
 .game-card-label {
     width: 100%;
@@ -620,8 +655,7 @@ hr {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-
-    min-height: 10rem;
+    margin-bottom: 1rem;
 }
 
 .user-review {
@@ -629,6 +663,15 @@ hr {
     flex-direction: column;
     border-bottom: 1px solid var(--border-colour);
     border-radius: 0;
+}
+
+.user-create-review {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-colour);
+    border-radius: 0;
+    position: sticky;
+    top: 5rem;
 }
 
 .star-rating {
@@ -690,6 +733,10 @@ textarea {
     resize: none;
 }
 
+.profile-picture-wrapper {
+    cursor: pointer;
+}
+
 .profile-dropdown-wrapper {
     position: relative;
 }
@@ -716,16 +763,19 @@ textarea {
 .dropdown-option {
     color: var(--text-colour);
     text-decoration: none;
+    border: none;
 }
 
 .dropdown-option:hover {
     color: var(--text-accent);
+    border: none;
 }
 
 .game-list-carousel {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    overflow-y: auto;
 }
 
 
@@ -738,7 +788,6 @@ textarea {
     text-decoration: unset;
     align-content: space-between;
 
-    height: 450px;
     overflow: hidden;
     flex: 1;
 }
@@ -749,8 +798,15 @@ textarea {
     flex: 1;
     min-width: 0;
     border-radius: 0;
+}
 
-    transition: transform 1s;
+.invisible {
+    opacity: 0;
+}
+
+.invisible.fade-in {
+    opacity: 1;
+    transition: opacity 1.5s;
 }
 
 .game-display-info {
@@ -778,6 +834,7 @@ textarea {
 @media screen and (max-width: 800px) {
     .game-container-grid.similar-games {
         flex-direction: column;
+        height: 600px;
     }
 
     .game-list-carousel {
@@ -786,14 +843,24 @@ textarea {
 
     .game-card.carousel {
         padding: 0;
+        height: clamp(4rem, 12vw, 5rem);
+        width: auto;
+        aspect-ratio: 2/1;
     }
 
     .game-card-carousel-image {
-        aspect-ratio: 2/1;
-        height: clamp(3rem, 10vw, 4.5rem)
+        width: 100%;
+        height: 100%;
+        padding: 0.5rem;
+        border-radius: 0.75rem;
     }
 
     .game-card-carousel-details {
         display: none;
+    }
+
+
+    .row.collapse {
+        flex-direction: column-reverse;
     }
 }

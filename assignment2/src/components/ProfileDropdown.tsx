@@ -3,11 +3,9 @@ import ProfilePicture from './ProfilePicture';
 import { useAuthStore } from '../authStore';
 import { useNavigate } from 'react-router-dom';
 
-interface Props {
-    userId: number | null;
-}
-
-function ProfileDropdown({userId}: Props) {
+function ProfileDropdown() {
+  const userId = useAuthStore((state) => state.userId);
+  
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -15,15 +13,6 @@ function ProfileDropdown({userId}: Props) {
   const toggleProfileDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
-
-  const fetchUser = async () => {
-    const res = await fetch(`/api/v1/users/${userId}`);
-    const data = await res.json();
-
-    if (data) {
-        setUser(data);
-    }
-  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -40,14 +29,36 @@ function ProfileDropdown({userId}: Props) {
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, [isDropdownOpen]);
 
   useEffect(() => {
+    let ignore = false;
+  
+    const fetchUser = async () => {
+      if (!userId) {
+        setUser(null);
+        return;
+      }
+  
+      try {
+        const res = await fetch(`/api/v1/users/${userId}`);
+        const data = await res.json();
+        if (!ignore) {
+          setUser(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch user:', err);
+      }
+    };
+  
     fetchUser();
+  
+    return () => {
+      ignore = true;
+    };
   }, [userId]);
-
 
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
@@ -59,22 +70,21 @@ function ProfileDropdown({userId}: Props) {
 
   return (
     <>
-      {/* <button onClick={handleLogout}>Log out</button> */}
       <div
         className="profile-dropdown-wrapper"
         ref={dropdownRef}
       >
-        <a href="#" onClick={toggleProfileDropdown}>
+        <div className="profile-picture-wrapper" onClick={toggleProfileDropdown}>
             <ProfilePicture creatorId={userId} size={""} />
-        </a>
+        </div>
         {isDropdownOpen && (
           <div className="profile-dropdown">
             Hello { user ? user.firstName : ""}
             <hr className="no-margin"/>
-            <a className="dropdown-option" href="#">My Profile</a>
-            <a className="dropdown-option" href="#">My Games</a>
+            <button className="dropdown-option" onClick={() => navigate("/my-profile")}>My Profile</button>
+            <button className="dropdown-option">Edit Profile</button>
             <hr className="no-margin"/>
-            <a className="dropdown-option" href="#" onClick={handleLogout}>Log out</a>
+            <button className="dropdown-option" onClick={handleLogout}>Log out</button>
           </div>
         )}
       </div>

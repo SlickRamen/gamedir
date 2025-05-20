@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom';
 import { useAuthStore } from '../authStore';
 import ProfilePicture from './ProfilePicture';
 import ProfileDropdown from './ProfileDropdown';
+import React from 'react';
 
 function Navbar() {
   const token = useAuthStore((state) => state.token);
-  const userId = useAuthStore((state) => state.userId);
 
   return (
     <>
@@ -20,11 +20,14 @@ function Navbar() {
             {/* <li><Link className="nav-link" to={`/`}>hot</Link></li>
             <li><Link className="nav-link" to={`/`}>fresh</Link></li> */}
             <li><Link className="nav-link" to={`/`}>explore</Link></li>
+            { token ? (
+              <li><Link className="nav-link" to={`/my-games`}>my games</Link></li>
+              ) : <></> }
           </ul>
           <div className="row float-right">
             { token ? (
               <>
-                <ProfileDropdown userId={userId}/>
+                <ProfileDropdown/>
               </>
             ) : (<>
               <Link className="button" to={`/register`}>Register</Link>
@@ -36,4 +39,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default React.memo(Navbar);

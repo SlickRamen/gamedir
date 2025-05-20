@@ -93,18 +93,98 @@ export const useAuthStore = create<AuthState>()(
 
       logout: () => {
         set({ token: null, userId: null });
-        localStorage.removeItem('auth-storage');
       },      
       
       clearAuth: () => {
         set({ token: null, userId: null });
       },
 
-      createGame: async () => { throw new Error('createGame not initialized'); },
-      
-      editGame: async () => { throw new Error('editGame not initialized'); },
+      createGame: async ({ title, description, genreId, platformIds, image, price }: CreateGameData) => {
+        const { token } = useAuthStore.getState();
+        if (!token) throw new Error('Unauthorized');
 
-      deleteGame: async () => { throw new Error('deleteGame not initialized'); },
+        const res = await fetch(`/api/v1/games`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': token,
+          },
+          body: JSON.stringify({ title, description, genreId, platformIds, price }),
+        });
+
+        if (!res.ok) throw new Error('Game creation failed');
+        const game = await res.json();
+        const gameId = game.gameId;
+
+        if (image) {
+          let contentType = '';
+          if (image.type === 'image/png') contentType = 'image/png';
+          else if (image.type === 'image/jpeg') contentType = 'image/jpeg';
+          else if (image.type === 'image/gif') contentType = 'image/gif';
+          else throw new Error('Unsupported image type');
+
+          const uploadRes = await fetch(`/api/v1/games/${gameId}/image`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': contentType,
+              'X-Authorization': token,
+            },
+            body: image,
+          });
+
+          if (!uploadRes.ok) throw new Error('Image upload failed');
+        }
+      },
+      
+      editGame: async (id: number, { title, description, genreId, platformIds, image, price }: CreateGameData) => {
+        const { token } = useAuthStore.getState();
+        if (!token) throw new Error('Unauthorized');
+
+        const res = await fetch(`/api/v1/games/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': token,
+          },
+          body: JSON.stringify({ title, description, genreId, platformIds, price }),
+        });
+
+        if (!res.ok) throw new Error('Game update failed');
+
+        if (image) {
+          let contentType = '';
+          if (image.type === 'image/png') contentType = 'image/png';
+          else if (image.type === 'image/jpeg') contentType = 'image/jpeg';
+          else if (image.type === 'image/gif') contentType = 'image/gif';
+          else throw new Error('Unsupported image type');
+
+          const uploadRes = await fetch(`/api/v1/games/${id}/image`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': contentType,
+              'X-Authorization': token,
+            },
+            body: image,
+          });
+
+          if (!uploadRes.ok) throw new Error('Image upload failed');
+        }
+      },
+      
+      deleteGame: async (id: number) => {
+        const { token } = useAuthStore.getState();
+        if (!token) throw new Error('Unauthorized');
+
+        const res = await fetch(`/api/v1/games/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': token,
+          }
+        });
+
+        if (!res.ok) throw new Error('Game delete failed');
+      }
     }),
     {
       name: 'auth-storage',
@@ -112,92 +192,11 @@ export const useAuthStore = create<AuthState>()(
   )
 );
 
-// Assign createGame AFTER the store is created
-useAuthStore.setState({
-  createGame: async ({ title, description, genreId, platformIds, image, price }) => {
-    const { token } = useAuthStore.getState();
-    if (!token) throw new Error('Unauthorized');
-
-    const res = await fetch(`/api/v1/games`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Authorization': token,
-      },
-      body: JSON.stringify({ title, description, genreId, platformIds, price }),
-    });
-
-    if (!res.ok) throw new Error('Game creation failed');
-    const game = await res.json();
-    const gameId = game.gameId;
-
-    if (image) {
-      let contentType = '';
-      if (image.type === 'image/png') contentType = 'image/png';
-      else if (image.type === 'image/jpeg') contentType = 'image/jpeg';
-      else if (image.type === 'image/gif') contentType = 'image/gif';
-      else throw new Error('Unsupported image type');
-
-      const uploadRes = await fetch(`/api/v1/games/${gameId}/image`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': contentType,
-          'X-Authorization': token,
-        },
-        body: image,
-      });
-
-      if (!uploadRes.ok) throw new Error('Image upload failed');
-    }
-  },
+// persist(
+//   (set, get) => ({
   
-  editGame: async (id, { title, description, genreId, platformIds, image, price }) => {
-    const { token } = useAuthStore.getState();
-    if (!token) throw new Error('Unauthorized');
-
-    const res = await fetch(`/api/v1/games/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Authorization': token,
-      },
-      body: JSON.stringify({ title, description, genreId, platformIds, price }),
-    });
-
-    if (!res.ok) throw new Error('Game update failed');
-
-    if (image) {
-      let contentType = '';
-      if (image.type === 'image/png') contentType = 'image/png';
-      else if (image.type === 'image/jpeg') contentType = 'image/jpeg';
-      else if (image.type === 'image/gif') contentType = 'image/gif';
-      else throw new Error('Unsupported image type');
-
-      const uploadRes = await fetch(`/api/v1/games/${id}/image`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': contentType,
-          'X-Authorization': token,
-        },
-        body: image,
-      });
-
-      if (!uploadRes.ok) throw new Error('Image upload failed');
-    }
-  },
-  
-  deleteGame: async (id) => {
-    const { token } = useAuthStore.getState();
-    if (!token) throw new Error('Unauthorized');
-
-    const res = await fetch(`/api/v1/games/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Authorization': token,
-      }
-    });
-
-    if (!res.ok) throw new Error('Game delete failed');
-  }
-});
+// }),
+// {
+//   name: 'auth-storage',
+// }
+// );

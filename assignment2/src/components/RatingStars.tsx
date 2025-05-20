@@ -2,9 +2,9 @@ import React from 'react';
 
 interface Props {
     rating: number;
-  }
-  
-  function RatingStars({ rating }: Props) {
+}
+
+function RatingStars({ rating }: Props) {
     const renderStars = (rating: number) => {
         const stars = [];
         const fullStars = Math.floor(rating / 2);

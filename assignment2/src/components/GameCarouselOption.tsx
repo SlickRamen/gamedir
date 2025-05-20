@@ -13,16 +13,6 @@ interface Props {
 
   
 function GameCarouselOption({game, active, progress}: Props) {
-    const imageUrl = `/api/v1/games/${game.gameId}/image`;
-
-    // const fetchedDate = new Date(game.creationDate);
-    // const options: Intl.DateTimeFormatOptions = {
-    //     year: '2-digit',
-    //     month: 'numeric',
-    //     day: 'numeric'
-    // };
-
-    // const date: string = fetchedDate.toLocaleDateString(undefined, options);
     return (
         <div className={`game-card carousel ${active ? 'active' : ''}`}>
             <div className="progress-bar" style={active ? { width: `${progress}%` } : {}}/>
@@ -36,4 +26,4 @@ function GameCarouselOption({game, active, progress}: Props) {
     );
 }
 
-export default GameCarouselOption;
+export default React.memo(GameCarouselOption);

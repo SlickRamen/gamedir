@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import ProfilePicture from "./ProfilePicture";
 import PlatformChip from "./PlatformChip";
 import GameCover from "./GameCover";
+import { useAuthStore } from "../authStore";
 
 
 interface Props {
@@ -12,6 +13,8 @@ interface Props {
 }
 
 function GameCard({ game, genre, platforms }: Props){
+    const userId = useAuthStore((state) => state.userId);
+    
     const imageUrl = `/api/v1/games/${game.gameId}/image`;
 
     const fetchedDate = new Date(game.creationDate);
@@ -39,13 +42,16 @@ function GameCard({ game, genre, platforms }: Props){
                 
                 <div className="row align-centre">
                     <ProfilePicture creatorId={game.creatorId} size={"author-icon"}/>
-                    <span className="game-author">{game.creatorFirstName} {game.creatorLastName}</span>
+                    <span className="game-authot">{ game.creatorId == userId ? (
+                          `${game.creatorFirstName} ${game.creatorLastName} (you)`
+                        ) : (
+                          `${game.creatorFirstName} ${game.creatorLastName}`
+                        )}</span>
                 </div>
 
                 <hr/>
                 <span className="platform-list unbound row align-centre">
                     <div className="game-platforms align-centre">
-                        For 
                         {platforms.map((p) => (
                             <PlatformChip key={p.platformId} platform={p}/>
                         ))}
@@ -56,4 +62,4 @@ function GameCard({ game, genre, platforms }: Props){
     );
 }
 
-export default GameCard;
+export default React.memo(GameCard);

@@ -8,7 +8,7 @@ interface Props {
 }
 
 function GameCover({ game, size, refreshKey }: Props) {
-    const [imgSrc, setImgSrc] = useState("");
+    const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (game.gameId !== null) {
@@ -25,4 +25,4 @@ function GameCover({ game, size, refreshKey }: Props) {
     );
 }
 
-export default GameCover;
+export default React.memo(GameCover);

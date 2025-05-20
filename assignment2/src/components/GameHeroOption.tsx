@@ -15,6 +15,8 @@ interface Props {
 
 function GameHeroOption({ game, genre, platforms }: Props){
     const userId = useAuthStore((state) => state.userId);
+    const [refreshState, setRefreshState] = useState(false);
+    const [fadeIn, setFadeIn] = useState(false); 
 
     let date: string = "Loading"
     
@@ -29,13 +31,21 @@ function GameHeroOption({ game, genre, platforms }: Props){
         date = fetchedDate.toLocaleDateString(undefined, options);
     }
 
+    useEffect(() => {
+        if (game) {
+            setFadeIn(false); // Reset fade-in state before triggering fade-in
+            setTimeout(() => setFadeIn(true), 50); // Delay to allow DOM updates before fading in
+        }
+    }, [game]); // Trigger fade-in effect when the game changes
+
     return (
         <>
           { !game ? ( <span className="error-banner">Game not found...</span> )
           : (
                 <>
-                <GameCover game={game} size={"game-display-image-fill"}/>
-                    <div className="game-display-info">
+                <GameCover game={game} 
+                        size={fadeIn ? "game-display-image-fill invisible fade-in" : "game-display-image-fill invisible"}/>
+                    <div className={fadeIn ? "game-display-info invisible fade-in" : "game-display-info invisible"}>
                         <span className="title game-card-title-fancy">
                             {game.title}
                         </span>
