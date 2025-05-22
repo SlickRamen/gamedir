@@ -82,7 +82,7 @@ function ProfileDropdown() {
             Hello { user ? user.firstName : ""}
             <hr className="no-margin"/>
             <button className="dropdown-option" onClick={() => navigate("/my-profile")}>My Profile</button>
-            <button className="dropdown-option">Edit Profile</button>
+            <button className="dropdown-option" onClick={() => navigate("/edit-profile")}>Edit Profile</button>
             <hr className="no-margin"/>
             <button className="dropdown-option" onClick={handleLogout}>Log out</button>
           </div>

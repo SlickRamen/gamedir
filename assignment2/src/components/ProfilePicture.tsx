@@ -4,32 +4,44 @@ import defaultProfile from '../resources/img/default-profile.png';
 interface Props {
   creatorId: number | null;
   size: string;
+  file?: File | null;
   refreshKey?: string | number;
 }
 
-function ProfilePicture({ creatorId, size, refreshKey }: Props) {
-    const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
+function ProfilePicture({ creatorId, size, file, refreshKey }: Props) {
+    const [imgSrc, setImgSrc] = useState<string>(defaultProfile);
 
     useEffect(() => {
-        if (creatorId !== null) {
-            setImgSrc(`/api/v1/users/${creatorId}/image?${refreshKey ?? Date.now()}`);
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            setImgSrc(objectUrl);
+
+            return () => URL.revokeObjectURL(objectUrl);
+        } else if (creatorId !== null) {
+            const newSrc = `/api/v1/users/${creatorId}/image?${refreshKey ?? Date.now()}`;
+            if (imgSrc !== newSrc) {
+                setImgSrc(newSrc);
+            }
+        } else {
+            if (imgSrc !== defaultProfile) {
+                setImgSrc(defaultProfile);
+            }
         }
-    }, [creatorId, refreshKey]);
+    }, [creatorId, file, refreshKey]);
 
     const handleImageError = () => {
-        setImgSrc(defaultProfile);
+        if (imgSrc !== defaultProfile) {
+            setImgSrc(defaultProfile);
+        }
     };
 
     return (
         <div className={`profile-badge ${size}`}>
-            { imgSrc == "" ? (
-            <>
-            </>
-            ) : (<img
+            <img
                 src={imgSrc}
                 alt="Author"
                 onError={handleImageError}
-            />)}
+            />
         </div>
     );
 }

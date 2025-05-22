@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useAuthStore } from '../authStore';
 import { useNavigate } from 'react-router-dom';
+import ProfilePicture from '../components/ProfilePicture';
 
 interface RegisterFormData {
   firstName: string;
@@ -72,12 +73,13 @@ function RegisterPage() {
 
       <div className="page-content">
         <div className="row">
-          <div className="col w2"/>
+          <div className="col w2 clear-on-shrink"/>
           <form onSubmit={handleSubmit} className="col gap-1 w4">
             <span className="title">Register as a member</span>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             
             <div className="row">
+              <ProfilePicture creatorId={null} file={form.profileImage} size={"profile-edit-page"} />
               <label className="form-input"><span className="form-label">First Name*</span><input name="firstName" placeholder="e.g. Jane" required onChange={handleChange} /></label>
               <label className="form-input"><span className="form-label">Last Name*</span><input name="lastName" placeholder="e.g. Doe" required onChange={handleChange} /></label>
             </div>
@@ -112,7 +114,7 @@ function RegisterPage() {
               <button className="expand" type="submit">Register</button>
             </div>
           </form>
-          <div className="col w2"/>
+          <div className="col w2 clear-on-shrink"/>
         </div>
       </div>
 

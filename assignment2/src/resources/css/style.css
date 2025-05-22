@@ -235,6 +235,8 @@ header {
     border-radius: 0.25rem;
 
     background-color: var(--border-colour);
+
+    border: 1px solid black;
 }
 
 .profile-badge.author-icon {
@@ -257,6 +259,16 @@ header {
     width: 10rem;
     height: 10rem;
     border-radius: 1rem;
+}
+
+.profile-badge.profile-edit-page {
+    aspect-ratio: 1 / 1;
+    max-width: unset;
+    max-height: unset;
+    height: unset;
+    width: unset;
+    flex-shrink: 0;
+    height: 35px;
 }
 
 .profile-badge img {
@@ -862,5 +874,13 @@ textarea {
 
     .row.collapse {
         flex-direction: column-reverse;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .col.clear-on-shrink {
+        width: 0;
+        max-width: 0;
+        flex: 0;
     }
 }

@@ -72,9 +72,7 @@ function GameListPage() {
       const response = await fetch(`/api/v1/games/genres`);
       const data = await response.json();
 
-      // React elements
       setGenres(data);
-      console.log(data);
     } catch (error) {
       console.error('Error fetching genres:', error);
     }
@@ -87,9 +85,7 @@ function GameListPage() {
       const response = await fetch(`/api/v1/games/platforms`);
       const data = await response.json();
 
-      // React elements
       setPlatforms(data);
-      console.log(data);
     } catch (error) {
       console.error('Error fetching platforms:', error);
     }

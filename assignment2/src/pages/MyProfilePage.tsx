@@ -13,6 +13,9 @@ function MyProfilePage() {
 
   const [user, setUser] = useState<User | null>(null);
 
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
+
   useEffect(() => {
     let ignore = false;
   
@@ -42,14 +45,16 @@ function MyProfilePage() {
     };
   }, [userId]);
 
-
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (!userId) {
       navigate("/");
     }
   }, [userId, navigate]);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
       <div className="wrapper">
@@ -57,13 +62,17 @@ function MyProfilePage() {
 
         <div className="page-content">
           <div className="row">
-            <div className="col w2"/>
+            <div className="col w2 clear-on-shrink"/>
             <div className="col w4 align-centre">
               <ProfilePicture creatorId={userId} size={"massive"} />
               <span>{user?.firstName + ' ' + user?.lastName}</span>
               <span>{user?.email}</span>
+              <div className="row">
+                <button onClick={() => navigate("/edit-profile")}>Edit Profile</button>
+                <button onClick={() => handleLogout()}>Log out</button>
+              </div>
             </div>
-            <div className="col w2"/>
+            <div className="col w2 clear-on-shrink"/>
           </div>
         </div>
 

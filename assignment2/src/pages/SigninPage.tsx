@@ -59,7 +59,7 @@ function SigninPage() {
 
       <div className="page-content">
       <div className="row">
-          <div className="col w2"/>
+          <div className="col w2 clear-on-shrink"/>
           <form onSubmit={handleSubmit} className="col gap-1 w4">
             <span className="title">Sign in to your account</span>
             {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -90,7 +90,7 @@ function SigninPage() {
               <button className="expand" type="submit">Sign In</button>
             </div>
           </form>
-          <div className="col w2"/>
+          <div className="col w2 clear-on-shrink"/>
         </div>
       </div>
 

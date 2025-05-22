@@ -6,6 +6,7 @@ interface AuthState {
   userId: number | null;
   signin: (data: SigninData) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
+  editProfile: (data: EditProfileData) => Promise<void>;
   logout: () => void;
   createGame: (data: CreateGameData) => Promise<void>;
   editGame: (id: number, data: CreateGameData) => Promise<void>;
@@ -18,6 +19,15 @@ interface RegisterData {
   lastName: string;
   email: string;
   password: string;
+  profileImage?: File | null;
+}
+
+interface EditProfileData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  currentPassword: string;
+  newPassword: string;
   profileImage?: File | null;
 }
 
@@ -76,7 +86,6 @@ export const useAuthStore = create<AuthState>()(
 
         set({ token: signInData.token, userId: signInData.userId });
 
-        console.log(profileImage);
         if (profileImage) {
           const contentType = profileImage.type;
 
@@ -85,6 +94,45 @@ export const useAuthStore = create<AuthState>()(
             headers: {
               'Content-Type': contentType,
               'X-Authorization': signInData.token,
+            },
+            body: profileImage,
+          });
+        }
+      },
+
+      editProfile: async ({ firstName, lastName, email, profileImage, currentPassword, newPassword }) => {
+        const { token, userId } = useAuthStore.getState();
+        if (!token || !userId) throw new Error('Unauthorized');
+
+        let postBody = JSON.stringify({ firstName, lastName, email });
+
+        if (currentPassword != '' && newPassword != '') {
+          postBody = JSON.stringify({ firstName, lastName, email, currentPassword: currentPassword, password: newPassword })
+        } else {
+          if (currentPassword != '' || newPassword != '') {
+            throw new Error('Password must not be blank if editing password');
+          }
+        }
+
+        const res = await fetch(`/api/v1/users/${userId}`, {
+          method: 'PATCH',
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Authorization': token, 
+          },
+          body: postBody,
+        });
+
+        if (!res.ok) throw new Error('Profile Edit failed');
+
+        if (profileImage) {
+          const contentType = profileImage.type;
+
+          await fetch(`/api/v1/users/${userId}/image`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': contentType,
+              'X-Authorization': token,
             },
             body: profileImage,
           });
@@ -191,12 +239,3 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
-
-// persist(
-//   (set, get) => ({
-  
-// }),
-// {
-//   name: 'auth-storage',
-// }
-// );

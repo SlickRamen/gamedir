@@ -72,7 +72,7 @@ function GameDeletePage() {
       <div className="page-content">
         { loading ? ( <span className="error-banner">Loading... please wait</span> ) : (
           <div className="row">
-            <div className="col w2" />
+            <div className="col w2 clear-on-shrink" />
             <form onSubmit={handleDeleteGame} className="col gap-1 w4">
               <span className="title">Delete {game.title}</span>
               <span>Are you sure you want to delete <span className='game-name-keyword'>{game.title}</span>? This action cannot be undone.</span>
@@ -82,7 +82,7 @@ function GameDeletePage() {
                 <button className="expand" type="submit">Yes, Delete</button>
               </div>
             </form>
-            <div className="col w2" />
+            <div className="col w2 clear-on-shrink" />
           </div>
         )}
       </div>

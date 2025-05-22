@@ -10,6 +10,7 @@ import GameDeletePage from './pages/GameDeletePage';
 import ScrollToTop from './ScrollToTop';
 import MyGamesPage from './pages/MyGamesPage';
 import MyProfilePage from './pages/MyProfilePage';
+import EditProfilePage from './pages/EditProfilePage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/register"         element={<RegisterPage />} />
         <Route path="/signin"           element={<SigninPage />} />
         <Route path="/my-profile"       element={<MyProfilePage />} />
+        <Route path="/edit-profile"     element={<EditProfilePage />} />
         <Route path="/my-games"         element={<MyGamesPage />} />
         <Route path="/game/:id"         element={<GameDetailPage />} />
         <Route path="/game/create"      element={<GameFormCreatePage />} />

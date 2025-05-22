@@ -113,7 +113,7 @@ function GameFormPage({ initialData = {}, onSubmit, mode = 'create' }: GameFormP
 
       <div className="page-content">
         <div className="row">
-          <div className="col w2" />
+          <div className="col w2 clear-on-shrink" />
           <form onSubmit={handleSubmit} className="col gap-1 w4">
             <span className="title">{mode === 'edit' ? 'Edit game' : 'Create a new game'}</span>
             {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -185,7 +185,7 @@ function GameFormPage({ initialData = {}, onSubmit, mode = 'create' }: GameFormP
               <button className="expand" type="submit">{mode === 'edit' ? 'Update Game' : 'Create Game'}</button>
             </div>
           </form>
-          <div className="col w2" />
+          <div className="col w2 clear-on-shrink" />
         </div>
       </div>
 
