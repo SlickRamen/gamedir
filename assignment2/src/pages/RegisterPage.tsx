@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../resources/css/style.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -23,13 +23,14 @@ function RegisterPage() {
     profileImage: null,
   });
 
-
   const register = useAuthStore((state) => state.register);
   const navigate = useNavigate();
   const token = useAuthStore((state) => state.token);
 
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+    
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -54,6 +55,14 @@ function RegisterPage() {
       console.error(err);
       setError('Registration failed. Please try again.');
     }
+  };
+
+  const removeProfilePicture = async () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+
+    setForm(prev => ({ ...prev, profileImage: null }));
   };
 
   const returnToHome = () => {
@@ -104,7 +113,8 @@ function RegisterPage() {
             </div>
 
             <div className="row">
-              <label className="form-input"><span className="form-label">Profile Icon</span><input name="profileImage" type="file" accept="image/png, image/jpeg, image/gif" onChange={handleChange}/></label>
+              <label className="form-input"><span className="form-label">Profile Icon</span><input ref={fileInputRef} name="profileImage" type="file" accept="image/png, image/jpeg, image/gif" onChange={handleChange}/></label>
+              <button onClick={() => removeProfilePicture()} type="button" style={{display: "flex", alignItems: "center"}}><i className='icon-trashcan use-line-height' style={{fontSize: "18px"}}></i></button>
             </div>
 
             <br/>
