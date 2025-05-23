@@ -11,9 +11,9 @@ function RatingStars({ rating }: Props) {
         const hasHalfStar = rating % 2 >= 1;
         const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
       
-        for (let i = 0; i < fullStars; i++) stars.push(<i className="icon-add" key={`full-${i}`} />);
-        if (hasHalfStar) stars.push(<i className="icon-calendar" key="half" />);
-        for (let i = 0; i < emptyStars; i++) stars.push(<i className="icon-trashcan" key={`empty-${i}`} />);
+        for (let i = 0; i < fullStars; i++) stars.push(<i className="icon-filled" key={`full-${i}`} />);
+        if (hasHalfStar) stars.push(<i className="icon-half-filled" key="half" />);
+        for (let i = 0; i < emptyStars; i++) stars.push(<i className="icon-not-filled" key={`empty-${i}`} />);
       
         return stars;
     };

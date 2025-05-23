@@ -16,7 +16,7 @@ function SearchBar({ searchTerm, setSearchTerm, onSearchSubmit } : Props) {
         onChange={(e) => setSearchTerm(e.target.value)}
         className="search-input"
       />
-      <button type="submit">Search</button>
+      <button type="submit" style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "5px"}}><i className="icon-search use-line-height" style={{fontSize: "20px"}}></i>Search</button>
     </form>
   );
 };

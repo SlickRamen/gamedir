@@ -12,13 +12,21 @@ interface Props {
 function ReviewInputForm({ game, onReviewSubmitted} : Props) {
     const userId = useAuthStore((state) => state.userId);
     const token = useAuthStore((state) => state.token);
+      const [error, setError] = useState<string | null>(null);
 
     const [rating, setRating] = useState<number>(0);
     const [review, setReview] = useState<string>("");
 
     const submitReview = async () => {
-        if (!userId || !token) return alert("You must be logged in to submit a review.");
-        if (rating < 1 || rating > 10) return alert("Rating must be between 1 and 10.");
+        if (!userId || !token) {
+            setError("You must be logged in to submit a review.");
+            return;
+        }
+
+        if (rating < 1 || rating > 10) {
+            setError("Rating must be between 1 and 10.");
+            return;
+        }
         
         try {
             const res = await fetch(`/api/v1/games/${game.gameId}/reviews`, {
@@ -33,11 +41,15 @@ function ReviewInputForm({ game, onReviewSubmitted} : Props) {
                 }),
             });
 
-            if (!res.ok) throw new Error("Failed to submit review");
+            if (!res.ok) {
+                setError("Failed to submit review.");
+                return;
+            }
 
             onReviewSubmitted();
             setRating(0);
             setReview("");
+            setError(null);
         } catch (err) {
             console.error("Error submitting review:", err);
             alert("Failed to submit review");
@@ -50,7 +62,7 @@ function ReviewInputForm({ game, onReviewSubmitted} : Props) {
         <div className="user-create-review">
             <div className="game-card-content">
                 <span className="subtitle">Review this game</span>
-                <br></br>
+                {error ? <p style={{ color: 'red' }}>{error}</p> : <br/>}
                 <div className="row align-centre">
                     <label className="form-input"><span className="form-label">Rating Value</span>
                     <input name="rating" 
@@ -64,7 +76,7 @@ function ReviewInputForm({ game, onReviewSubmitted} : Props) {
 
                     <div className="col no-gap no-shrink fit-min">
                         <div className="row align-centre fit-min">
-                            <RatingStars rating={8}/>
+                            <RatingStars rating={rating}/>
                         </div>
                     </div>
                 </div>

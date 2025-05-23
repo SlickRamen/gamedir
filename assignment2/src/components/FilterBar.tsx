@@ -80,7 +80,7 @@ function FilterBar({ genreIds, platformIds, onFilterChange }: Props) {
         <div className="filter-options">
           <div className="filter">
             <a onClick={() => toggle('price')} className="filter-header" href="#" tabIndex={0}>
-              Price <i className={expanded.price ? 'icon-trashcan' : 'icon-add'}></i>
+              Price <i className={expanded.price ? 'icon-hamburger-close' : 'icon-hamburger'}></i>
             </a>
             {expanded.price && (
               <div className="filter-body">
@@ -106,7 +106,7 @@ function FilterBar({ genreIds, platformIds, onFilterChange }: Props) {
 
           <div className="filter">
             <a onClick={() => toggle('genre')} className="filter-header" href="#" tabIndex={0}>
-              Genre <i className={expanded.genre ? 'icon-trashcan' : 'icon-add'}></i>
+              Genre <i className={expanded.genre ? 'icon-hamburger-close' : 'icon-hamburger'}></i>
             </a>
             {expanded.genre && (
               <div className="filter-body">
@@ -126,7 +126,7 @@ function FilterBar({ genreIds, platformIds, onFilterChange }: Props) {
 
           <div className="filter">
             <a onClick={() => toggle('platform')} className="filter-header" href="#" tabIndex={0}>
-              Platform <i className={expanded.platform ? 'icon-trashcan' : 'icon-add'}></i>
+              Platform <i className={expanded.platform ? 'icon-hamburger-close' : 'icon-hamburger'}></i>
             </a>
             {expanded.platform && (
               <div className="filter-body">
@@ -146,7 +146,7 @@ function FilterBar({ genreIds, platformIds, onFilterChange }: Props) {
 
           <div className="filter">
             <a onClick={() => toggle('sort')} className="filter-header" href="#" tabIndex={0}>
-              Sort By <i className={expanded.sort ? 'icon-trashcan' : 'icon-add'}></i>
+              Sort By <i className={expanded.sort ? 'icon-hamburger-close' : 'icon-hamburger'}></i>
             </a>
             {expanded.sort && (
                 <select
