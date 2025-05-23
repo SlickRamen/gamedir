@@ -29,7 +29,7 @@ function ReviewInputForm({ game, onReviewSubmitted} : Props) {
         }
         
         try {
-            const res = await fetch(`/api/v1/games/${game.gameId}/reviews`, {
+            const res = await fetch(`http://localhost:4941/api/v1/games/${game.gameId}/reviews`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -20,7 +20,7 @@ function GameFormEditPage() {
     const fetchGame = async () => {
       if (!gameId) return;
 
-      const res = await fetch(`/api/v1/games/${gameId}`);
+      const res = await fetch(`http://localhost:4941/api/v1/games/${gameId}`);
       const data = await res.json();
       
       // Redirect to the home page if not creator

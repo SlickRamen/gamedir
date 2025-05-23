@@ -30,14 +30,14 @@ function MyGamesPage() {
     if (token) {
       try {
         const [createdRes, wishlistedRes, ownedRes, reviewedRes] = await Promise.all([
-          fetch(`/api/v1/games?creatorId=${userId}`),
-          fetch('/api/v1/games?wishlistedByMe=true', {
+          fetch(`http://localhost:4941/api/v1/games?creatorId=${userId}`),
+          fetch('http://localhost:4941/api/v1/games?wishlistedByMe=true', {
             headers: { 'X-Authorization': token },
           }),
-          fetch(`/api/v1/games?ownedByMe=true`, {
+          fetch(`http://localhost:4941/api/v1/games?ownedByMe=true`, {
             headers: { 'X-Authorization': token },
           }),
-          fetch(`/api/v1/games?reviewerId=${userId}`),
+          fetch(`http://localhost:4941/api/v1/games?reviewerId=${userId}`),
         ]);
 
         const [createdData, wishlistedData, ownedData, reviewedData] = await Promise.all([
@@ -75,7 +75,7 @@ function MyGamesPage() {
 
   const fetchGenres = async () => {
     try {
-      const response = await fetch(`/api/v1/games/genres`);
+      const response = await fetch(`http://localhost:4941/api/v1/games/genres`);
       const data = await response.json();
       
       setGenres(data);
@@ -86,7 +86,7 @@ function MyGamesPage() {
 
   const fetchPlatforms = async () => {
     try {
-      const response = await fetch(`/api/v1/games/platforms`);
+      const response = await fetch(`http://localhost:4941/api/v1/games/platforms`);
       const data = await response.json();
 
       setPlatforms(data);

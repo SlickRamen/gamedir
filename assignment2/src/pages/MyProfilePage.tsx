@@ -26,7 +26,7 @@ function MyProfilePage() {
       }
   
       try {
-        const res = await fetch(`/api/v1/users/${userId}`, {
+        const res = await fetch(`http://localhost:4941/api/v1/users/${userId}`, {
           headers: { 'X-Authorization': token },
         });
         const data = await res.json();

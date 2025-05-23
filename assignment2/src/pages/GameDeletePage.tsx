@@ -21,7 +21,7 @@ function GameDeletePage() {
 
   const fetchGame = async () => {
     try {
-      const res = await fetch(`/api/v1/games/${id}`);
+      const res = await fetch(`http://localhost:4941/api/v1/games/${id}`);
       const data = await res.json();
 
       // Redirect to the home page if not creator
@@ -40,7 +40,7 @@ function GameDeletePage() {
 
   const fetchGameReviews = async () => {
     try {
-      const res = await fetch(`/api/v1/games/${id}/reviews`);
+      const res = await fetch(`http://localhost:4941/api/v1/games/${id}/reviews`);
       const data = await res.json();
 
       if (data && data.length > 0) {

@@ -12,7 +12,7 @@ function GameCover({ game, size, refreshKey }: Props) {
 
     useEffect(() => {
         if (game.gameId !== null) {
-            setImgSrc(`/api/v1/games/${game.gameId}/image?${refreshKey ?? Date.now()}`);
+            setImgSrc(`http://localhost:4941/api/v1/games/${game.gameId}/image?${refreshKey ?? Date.now()}`);
         }
     }, [game, refreshKey]);
 

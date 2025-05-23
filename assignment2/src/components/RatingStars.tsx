@@ -7,6 +7,9 @@ interface Props {
 function RatingStars({ rating }: Props) {
     const renderStars = (rating: number) => {
         const stars = [];
+        
+        rating = Math.max(Math.min(rating, 10), 0)
+
         const fullStars = Math.floor(rating / 2);
         const hasHalfStar = rating % 2 >= 1;
         const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);

@@ -299,6 +299,23 @@ header {
     text-decoration: unset;
 }
 
+
+.game-card.active,
+.game-card:hover {
+    background-color: #efefef;
+    border-color: var(--border-accent);
+    transition: background-color 0.2s;
+}
+
+.game-card.active > .game-card-label,
+.game-card:hover > .game-card-label {
+    background-color: #efefef;
+    border-color: var(--border-accent);
+    transition: background-color 0.2s;
+}
+
+
+
 .game-card.carousel {
     position: relative;
     color: var(--text-colour);

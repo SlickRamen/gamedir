@@ -15,7 +15,7 @@ interface Props {
 function GameCard({ game, genre, platforms }: Props){
     const userId = useAuthStore((state) => state.userId);
     
-    const imageUrl = `/api/v1/games/${game.gameId}/image`;
+    const imageUrl = `http://localhost:4941/api/v1/games/${game.gameId}/image`;
 
     const fetchedDate = new Date(game.creationDate);
     const options: Intl.DateTimeFormatOptions = {

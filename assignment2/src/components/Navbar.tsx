@@ -21,7 +21,10 @@ function Navbar() {
             <li><Link className="nav-link" to={`/`}>fresh</Link></li> */}
             <li><Link className="nav-link" to={`/`}>explore</Link></li>
             { token ? (
-              <li><Link className="nav-link" to={`/my-games`}>my games</Link></li>
+              <>
+                <li><Link className="nav-link" to={`/my-games`}>my games</Link></li>
+                <li><Link className="nav-link" to={`/game/create`}>create game</Link></li>
+              </>
               ) : <></> }
           </ul>
           <div className="row float-right">

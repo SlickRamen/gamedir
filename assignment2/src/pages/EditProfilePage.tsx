@@ -49,7 +49,7 @@ function EditProfilePage() {
       }
   
       try {
-        const res = await fetch(`/api/v1/users/${userId}`, {
+        const res = await fetch(`http://localhost:4941/api/v1/users/${userId}`, {
           headers: { 'X-Authorization': token },
         });
 
@@ -124,7 +124,7 @@ function EditProfilePage() {
     setForm(prev => ({ ...prev, profileImage: null }));
 
 
-    await fetch(`/api/v1/users/${userId}/image`, {
+    await fetch(`http://localhost:4941/api/v1/users/${userId}/image`, {
       method: 'DELETE',
       headers: { 'X-Authorization': token },
     });

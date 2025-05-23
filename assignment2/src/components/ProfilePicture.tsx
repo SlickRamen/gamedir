@@ -18,7 +18,7 @@ function ProfilePicture({ creatorId, size, file, refreshKey }: Props) {
 
             return () => URL.revokeObjectURL(objectUrl);
         } else if (creatorId !== null) {
-            const newSrc = `/api/v1/users/${creatorId}/image?${refreshKey ?? Date.now()}`;
+            const newSrc = `http://localhost:4941/api/v1/users/${creatorId}/image?${refreshKey ?? Date.now()}`;
             if (imgSrc !== newSrc) {
                 setImgSrc(newSrc);
             }

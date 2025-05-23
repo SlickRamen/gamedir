@@ -90,8 +90,8 @@ function GameFormPage({ initialData = {}, onSubmit, mode = 'create' }: GameFormP
     const fetchData = async () => {
       try {
         const [genresRes, platformsRes] = await Promise.all([
-          fetch('/api/v1/games/genres'),
-          fetch('/api/v1/games/platforms'),
+          fetch('http://localhost:4941/api/v1/games/genres'),
+          fetch('http://localhost:4941/api/v1/games/platforms'),
         ]);
 
         const genresData = await genresRes.json();

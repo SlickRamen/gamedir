@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthState>()(
       userId: null,
 
       signin: async ({ email, password }) => {
-        const res = await fetch('/api/v1/users/login', {
+        const res = await fetch('http://localhost:4941/api/v1/users/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
@@ -64,7 +64,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       register: async ({ firstName, lastName, email, password, profileImage }) => {
-        const res = await fetch('/api/v1/users/register', {
+        const res = await fetch('http://localhost:4941/api/v1/users/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ firstName, lastName, email, password }),
@@ -74,7 +74,7 @@ export const useAuthStore = create<AuthState>()(
 
         const regData = await res.json();
 
-        const signin = await fetch('/api/v1/users/login', {
+        const signin = await fetch('http://localhost:4941/api/v1/users/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
@@ -89,7 +89,7 @@ export const useAuthStore = create<AuthState>()(
         if (profileImage) {
           const contentType = profileImage.type;
 
-          await fetch(`/api/v1/users/${signInData.userId}/image`, {
+          await fetch(`http://localhost:4941/api/v1/users/${signInData.userId}/image`, {
             method: 'PUT',
             headers: {
               'Content-Type': contentType,
@@ -114,7 +114,7 @@ export const useAuthStore = create<AuthState>()(
           }
         }
 
-        const res = await fetch(`/api/v1/users/${userId}`, {
+        const res = await fetch(`http://localhost:4941/api/v1/users/${userId}`, {
           method: 'PATCH',
           headers: { 
             'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ export const useAuthStore = create<AuthState>()(
         if (profileImage) {
           const contentType = profileImage.type;
 
-          await fetch(`/api/v1/users/${userId}/image`, {
+          await fetch(`http://localhost:4941/api/v1/users/${userId}/image`, {
             method: 'PUT',
             headers: {
               'Content-Type': contentType,
@@ -151,7 +151,7 @@ export const useAuthStore = create<AuthState>()(
         const { token } = useAuthStore.getState();
         if (!token) throw new Error('Unauthorized');
 
-        const res = await fetch(`/api/v1/games`, {
+        const res = await fetch(`http://localhost:4941/api/v1/games`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ export const useAuthStore = create<AuthState>()(
           else if (image.type === 'image/gif') contentType = 'image/gif';
           else throw new Error('Unsupported image type');
 
-          const uploadRes = await fetch(`/api/v1/games/${gameId}/image`, {
+          const uploadRes = await fetch(`http://localhost:4941/api/v1/games/${gameId}/image`, {
             method: 'PUT',
             headers: {
               'Content-Type': contentType,
@@ -188,7 +188,7 @@ export const useAuthStore = create<AuthState>()(
         const { token } = useAuthStore.getState();
         if (!token) throw new Error('Unauthorized');
 
-        const res = await fetch(`/api/v1/games/${id}`, {
+        const res = await fetch(`http://localhost:4941/api/v1/games/${id}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -206,7 +206,7 @@ export const useAuthStore = create<AuthState>()(
           else if (image.type === 'image/gif') contentType = 'image/gif';
           else throw new Error('Unsupported image type');
 
-          const uploadRes = await fetch(`/api/v1/games/${id}/image`, {
+          const uploadRes = await fetch(`http://localhost:4941/api/v1/games/${id}/image`, {
             method: 'PUT',
             headers: {
               'Content-Type': contentType,
@@ -223,7 +223,7 @@ export const useAuthStore = create<AuthState>()(
         const { token } = useAuthStore.getState();
         if (!token) throw new Error('Unauthorized');
 
-        const res = await fetch(`/api/v1/games/${id}`, {
+        const res = await fetch(`http://localhost:4941/api/v1/games/${id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

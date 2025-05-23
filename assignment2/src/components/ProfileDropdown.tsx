@@ -43,7 +43,7 @@ function ProfileDropdown() {
       }
   
       try {
-        const res = await fetch(`/api/v1/users/${userId}`);
+        const res = await fetch(`http://localhost:4941/api/v1/users/${userId}`);
         const data = await res.json();
         if (!ignore) {
           setUser(data);
