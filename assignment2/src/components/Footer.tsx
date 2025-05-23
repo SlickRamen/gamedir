@@ -9,23 +9,23 @@ function Footer() {
             A dayly product.
           </div>
           <div className="footer-grid-item">
-            Info
+            {/* Info
             <hr/>
             About<br/>
             Blog<br/>
-            FAQ<br/>
+            FAQ<br/> */}
           </div>
           <div className="footer-grid-item">
-            Support
+            {/* Support
             <hr/>
             Help<br/>
-            Bug report<br/>
+            Bug report<br/> */}
           </div>
           <div className="footer-grid-item">
-            Business
+            {/* Business
             <hr/>
             Monetization<br/>
-            Billing<br/>
+            Billing<br/> */}
           </div>
         </div>
     </div>

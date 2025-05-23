@@ -121,14 +121,14 @@ function GameFormPage({ initialData = {}, onSubmit, mode = 'create' }: GameFormP
             <div className="row">
               <label className="form-input">
                 <span className="form-label">Title*</span>
-                <input name="title" value={form.title} required onChange={handleChange} />
+                <input name="title" value={form.title} placeholder="e.g. Marathon" required onChange={handleChange} />
               </label>
             </div>
 
             <div className="row">
               <label className="form-input">
                 <span className="form-label">Description*</span>
-                <textarea name="description" value={form.description} required onChange={handleChangeTA} />
+                <textarea name="description" value={form.description} placeholder="Write about your game..."  required onChange={handleChangeTA} />
               </label>
             </div>
 

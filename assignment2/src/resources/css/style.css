@@ -821,6 +821,21 @@ textarea {
     flex: 1;
 }
 
+
+.current-displayed-game.active,
+.current-displayed-game:hover {
+    background-color: #efefef;
+    border-color: var(--border-accent);
+    transition: background-color 0.2s;
+}
+
+.current-displayed-game.active > .game-display-info,
+.current-displayed-game:hover > .game-display-info {
+    background-color: #efefef;
+    border-color: var(--border-accent);
+    transition: background-color 0.2s;
+}
+
 .game-display-image-fill {
     object-fit: cover;
     min-height: 100%;
