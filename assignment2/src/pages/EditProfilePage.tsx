@@ -110,7 +110,11 @@ function EditProfilePage() {
 
       navigate('/my-profile');
     } catch (err) {
-      setError(`${err}`);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     }
   };
 
