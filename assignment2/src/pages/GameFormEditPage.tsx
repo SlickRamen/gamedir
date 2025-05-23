@@ -20,7 +20,6 @@ function GameFormEditPage() {
     const fetchGame = async () => {
       if (!gameId) return;
 
-
       if (!userId) {
         navigate("/");
         return;

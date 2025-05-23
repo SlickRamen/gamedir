@@ -61,6 +61,13 @@ function GameDeletePage() {
   
 
   useEffect(() => {
+    if (!id) return;
+
+    if (!userId) {
+      navigate("/");
+      return;
+    }
+    
     fetchGame();
     fetchGameReviews();
   }, [id]);
