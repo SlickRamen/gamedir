@@ -20,6 +20,12 @@ function GameFormEditPage() {
     const fetchGame = async () => {
       if (!gameId) return;
 
+
+      if (!userId) {
+        navigate("/");
+        return;
+      }
+
       const res = await fetch(`http://localhost:4941/api/v1/games/${gameId}`);
       const data = await res.json();
       
